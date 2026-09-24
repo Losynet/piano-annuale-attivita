@@ -170,6 +170,7 @@ footer p{margin:0 0 10px;max-width:62ch}
       <div class="acts">
         <a class="btn2 solid" id="add" href="#" role="button" aria-disabled="true">Aggiungi al calendario</a>
         <button class="btn2" id="dl2" disabled>Scarica il file</button>
+        <button class="btn2" id="copyUrl" hidden disabled>Copia l'indirizzo del calendario</button>
       </div>
       <p class="small" id="howAlt"></p>
       <p class="small" id="sync" hidden></p>
@@ -515,7 +516,7 @@ function init(){
     const n=list.length;
     $("count").replaceChildren(...[n?(n===1?"1 appuntamento":n+" appuntamenti"):"Nessun appuntamento",
       clashes?el("small",{text:clashes===1?"1 sovrapposizione":clashes+" sovrapposizioni"}):null].filter(Boolean));
-    for(const id of ["dl2","print"])$(id).disabled=!n;
+    for(const id of ["dl2","print","copyUrl"])$(id).disabled=!n;
     for(const id of ["dl","add"])$(id).setAttribute("aria-disabled",String(!n));
     $("howHint").textContent=n?(daHome?"Le tue scelte sono arrivate dall'icona: ora tocca «Aggiungi al calendario».":"Segui questi passaggi: bastano pochi secondi."):"Scegli prima un indirizzo e le classi.";
     if(window.__syncIcs)window.__syncIcs();
@@ -553,6 +554,16 @@ function init(){
   }
   if(WORKER&&!iOS&&!android){const g=el("a",{id:"gsub",href:"#",target:"_blank",text:"Iscriviti con Google Calendar"});$("howAlt").after(g);
     g.addEventListener("click",()=>{g.href=subLinks().google;});}
+  if(WORKER){const cb=$("copyUrl");cb.hidden=false;
+    cb.addEventListener("click",()=>{
+      if(!current.length)return;
+      try{localStorage.setItem(SKEY,"1");}catch(_){}
+      try{syncNow();}catch(_){}
+      const u=subLinks().https;
+      const ok=()=>{cb.textContent="Indirizzo copiato";setTimeout(()=>cb.textContent="Copia l'indirizzo del calendario",2500);};
+      if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(u).then(ok,()=>prompt("Copia questo indirizzo:",u));
+      else prompt("Copia questo indirizzo:",u);
+    });}
   window.__syncIcs=()=>{
     if(!("caches" in window)||!current.length)return;
     try{const body=ics();caches.open("impegni-ics").then(c=>c.put("/__impegni_ics__",new Response(body,{headers:{"Content-Type":"text/calendar; charset=utf-8"}}))).catch(()=>{});}catch(e){showErr(e.message);}
@@ -632,10 +643,10 @@ function init(){
   if(WORKER){
     for(const id of ["add","dl"])$(id).textContent="Iscriviti al calendario";
     if(android){
-      steps=["Tocca «Iscriviti al calendario»: si apre Google Calendar.",
-             "Conferma con «Aggiungi»: il calendario compare fra i tuoi e si aggiorna da solo.",
-             "Per togliere appuntamenti o cambiare classi torna qui e modifica: il calendario si aggiorna da solo, senza reiscriverti."];
-      alt="Se Google Calendar non si apre, tocca «Scarica il file» per aggiungere gli appuntamenti una sola volta, senza aggiornamenti.";
+      steps=["Tocca «Iscriviti al calendario». Se Google chiede «Aggiungere questo calendario?», tocca «Aggiungi».",
+             "Controlla nell'app Google Calendar (Menu, Impostazioni) che il nuovo calendario compaia fra i tuoi. Se non c'è, segui le istruzioni qui sotto.",
+             "Per togliere appuntamenti o cambiare classi torna qui e modifica: il calendario si aggiorna da solo (su Google può servire fino a un giorno)."];
+      alt="Se il calendario non compare: tocca «Copia l'indirizzo del calendario». Apri Chrome, vai su calendar.google.com e dal menu ⋮ attiva «Sito desktop». Accanto ad «Altri calendari» tocca +, poi «Da URL», incolla l'indirizzo e tocca «Aggiungi calendario». Dopo qualche minuto compare nell'app: attiva «Sincronizza» nelle sue impostazioni.";
     }else if(iOS){
       steps=["Tocca «Iscriviti al calendario», poi «Iscriviti».",
              "Scegli l'account iCloud. Se vuoi i promemoria, disattiva «Rimuovi avvisi». Tocca «Aggiungi».",
