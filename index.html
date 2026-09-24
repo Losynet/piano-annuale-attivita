@@ -175,6 +175,7 @@ footer p{margin:0 0 10px;max-width:62ch}
       </div>
       <p class="small" id="howAlt"></p>
       <p class="small" id="sync" hidden></p>
+      <p class="small" id="dup" hidden>Controllo: in Calendario, tocca «Calendari» in basso. Se «Impegni scuola 2026/27» compare più volte, tieni un solo calendario ed elimina gli altri (tocca ⓘ accanto al nome, poi «Elimina calendario»).</p>
       <p class="small" id="err" hidden style="color:var(--warn)"></p>
     </div>
   </section>
@@ -414,7 +415,7 @@ function init(){
   const DEV=(/iPhone|iPad|iPod/.test(UA0)||(/Macintosh/.test(UA0)&&navigator.maxTouchPoints>1))?"ios":/Android/.test(UA0)?"android":"pc";
   const DEVNOME={ios:"iPhone",android:"Android",pc:"computer"}[DEV];
   document.documentElement.classList.add("dev-"+DEV);
-  if(WORKER)document.documentElement.classList.add("abbonamento");
+  if(WORKER){document.documentElement.classList.add("abbonamento");const dp=document.getElementById("dup");if(dp)dp.hidden=false;}
   let st={ind:[],cls:[],hidden:[],opts:{coll:true,fam:true,glo:true,cal:false,past:false,alarm:"60"}};
   try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s&&Array.isArray(s.ind)&&Array.isArray(s.cls))st={ind:s.ind,cls:s.cls,hidden:Array.isArray(s.hidden)?s.hidden:[],opts:{...st.opts,...(s.opts||{})}};}catch(_){}
   // Scelte passate dall'app sulla schermata Home (vedi apriInSafari)
@@ -422,7 +423,9 @@ function init(){
   if(location.hash.startsWith("#stato=")){
     try{const s=JSON.parse(decodeURIComponent(location.hash.slice(7)));
       if(s&&Array.isArray(s.ind)&&Array.isArray(s.cls)){st={ind:s.ind,cls:s.cls,hidden:Array.isArray(s.hidden)?s.hidden:[],opts:{...st.opts,...(s.opts||{})}};daHome=true;
-        try{localStorage.setItem(KEY,JSON.stringify(st));}catch(_){}}}catch(_){}
+        try{localStorage.setItem(KEY,JSON.stringify(st));}catch(_){}
+        // Stesso codice di abbonamento dell'app sulla Home: un solo indirizzo, niente calendari doppi
+        try{if(typeof s.t==="string"&&/^[A-Za-z0-9_-]{16,64}$/.test(s.t)&&!localStorage.getItem("impegni-2026-27-token"))localStorage.setItem("impegni-2026-27-token",s.t);}catch(_){}}}catch(_){}
     history.replaceState(null,"",location.pathname+location.search);
   }
   const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st));}catch(_){}if(window.__onSave)window.__onSave();};
@@ -560,16 +563,17 @@ function init(){
     navigator.serviceWorker.addEventListener("controllerchange",()=>{swReady=true;window.__syncIcs();});
   }
   if(WORKER&&!iOS&&!android){const g=el("a",{id:"gsub",href:"#",target:"_blank",text:"Iscriviti con Google Calendar"});$("howAlt").after(g);
-    g.addEventListener("click",()=>{g.href=subLinks().google;});}
+    g.addEventListener("click",()=>{try{localStorage.setItem(SKEY,"1");}catch(_){}try{syncNow();}catch(_){}g.href=subLinks().google;});}
   if(WORKER){const cb=$("copyUrl");cb.hidden=(DEV==="ios"); // su iPhone non serve
     cb.addEventListener("click",()=>{
       if(!current.length)return;
       try{localStorage.setItem(SKEY,"1");}catch(_){}
-      try{syncNow();}catch(_){}
-      const u=subLinks().https;
-      const ok=()=>{cb.textContent="Indirizzo copiato";setTimeout(()=>cb.textContent="Copia l'indirizzo del calendario",2500);};
-      if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(u).then(ok,()=>prompt("Copia questo indirizzo:",u));
-      else prompt("Copia questo indirizzo:",u);
+      dopoSalvataggio(()=>{
+        const u=subLinks().https;
+        const ok=()=>{cb.textContent="Indirizzo copiato";setTimeout(()=>cb.textContent="Copia l'indirizzo del calendario",2500);};
+        if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(u).then(ok,()=>prompt("Copia questo indirizzo:",u));
+        else prompt("Copia questo indirizzo:",u);
+      });
     });}
   window.__syncIcs=()=>{
     if(!("caches" in window)||!current.length)return;
@@ -580,7 +584,7 @@ function init(){
     setTimeout(()=>$("add").scrollIntoView({behavior:"smooth",block:"center"}),300);}
   // Dall'app sulla schermata Home: riapre la stessa pagina in Safari con le stesse scelte
   function apriInSafari(){
-    const u=location.origin+location.pathname+"#stato="+encodeURIComponent(JSON.stringify({ind:st.ind,cls:st.cls,hidden:st.hidden,opts:st.opts}));
+    const u=location.origin+location.pathname+"#stato="+encodeURIComponent(JSON.stringify({ind:st.ind,cls:st.cls,hidden:st.hidden,opts:st.opts,t:WORKER?token():undefined}));
     location.href="x-safari-"+u;
   }
   function shareFile(){
@@ -615,33 +619,44 @@ function init(){
   }
   window.__onSave=()=>{clearTimeout(syncTimer);syncTimer=setTimeout(syncNow,800);};
   if(WORKER&&iscritto()){setSync("Sei iscritto: ogni modifica fatta qui arriva da sola al tuo calendario.");syncNow();}
+  // L'indirizzo dell'abbonamento è SEMPRE lo stesso (solo il codice): se cambiasse, il telefono
+  // lo vedrebbe come un altro calendario e gli appuntamenti comparirebbero doppi.
+  // Le scelte viaggiano nell'indirizzo (?s=) solo se il Worker non ha l'archivio KV.
+  let senzaKV=false;
   function subLinks(){
-    const bytes=new TextEncoder().encode(statoJSON());
-    let bin="";for(const b of bytes)bin+=String.fromCharCode(b);
-    const https=W0+"/c/"+token()+".ics?s="+btoa(bin).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+    let https=W0+"/c/"+token()+".ics";
+    if(senzaKV){
+      const bytes=new TextEncoder().encode(statoJSON());
+      let bin="";for(const b of bytes)bin+=String.fromCharCode(b);
+      https+="?s="+btoa(bin).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+    }
     const webcal=https.replace(/^https:/,"webcal:");
     return {https,webcal,google:"https://calendar.google.com/calendar/r?cid="+encodeURIComponent(https)};
+  }
+  // Le scelte devono essere sul Worker PRIMA che il telefono chieda il calendario
+  function salvaOra(){
+    const body=statoJSON();
+    if(body===lastSent)return Promise.resolve(true);
+    return fetch(W0+"/stato/"+token(),{method:"PUT",body,headers:{"Content-Type":"application/json"}})
+      .then(r=>{if(r.ok){lastSent=body;return true;}if(r.status===501)senzaKV=true;return false;})
+      .catch(()=>false);
+  }
+  function dopoSalvataggio(fn){
+    if(statoJSON()===lastSent){fn();return;}
+    setSync("Salvo le tue scelte…");
+    salvaOra().then(ok=>{
+      if(ok||senzaKV){setSync("Sei iscritto: ogni modifica fatta qui arriva da sola al tuo calendario.");fn();}
+      else setSync("Non riesco a salvare le scelte (connessione assente?). Riprova tra poco.",true);
+    });
   }
   function add(ev){
     if(!current.length){ev.preventDefault();return;}
     if(WORKER){
       // Abbonamento: il calendario si aggiorna da solo quando cambia il piano
+      ev.preventDefault();
+      if(iscritto()&&!confirm("Risulti già iscritto da questo dispositivo.\n\nSe nel Calendario hai già «Impegni scuola 2026/27» non serve altro: le modifiche arrivano da sole, e iscriverti di nuovo crea un calendario doppio.\n\nSe l'iscrizione non era andata a buon fine, tocca OK."))return;
       try{localStorage.setItem(SKEY,"1");}catch(_){}
-      try{syncNow();}catch(_){}
-      const u=subLinks(),a=ev.currentTarget;
-      if(android){
-        // Android: l'app Google Calendar non aggiunge calendari esterni.
-        // Copio l'indirizzo e apro in Chrome (non nell'app) la pagina «Da URL» di Google Calendar.
-        ev.preventDefault();
-        const page="calendar.google.com/calendar/u/0/r/settings/addbyurl";
-        const go=()=>{location.href="intent://"+page+"#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url="+encodeURIComponent("https://"+page)+";end";};
-        let done=false;const once=()=>{if(!done){done=true;go();}};
-        if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(u.https).then(once,()=>{prompt("Copia questo indirizzo, poi tocca OK:",u.https);once();});
-        else{prompt("Copia questo indirizzo, poi tocca OK:",u.https);once();}
-        setTimeout(once,1500);
-        return;
-      }
-      a.href=u.webcal;a.removeAttribute("target");
+      dopoSalvataggio(()=>iscrivi(ev.currentTarget));
       return;
     }
     if(iOS&&standalone){ev.preventDefault();apriInSafari();return;}
@@ -657,6 +672,21 @@ function init(){
         try{a.href="data:text/calendar;charset=utf-8,"+encodeURIComponent(ics());}catch(e){ev.preventDefault();showErr(e.message);}
       }
     }else{ev.preventDefault();download();}
+  }
+  function iscrivi(a){
+    const u=subLinks();
+    if(android){
+      // Android: l'app Google Calendar non aggiunge calendari esterni.
+      // Copio l'indirizzo e apro in Chrome (non nell'app) la pagina «Da URL» di Google Calendar.
+      const page="calendar.google.com/calendar/u/0/r/settings/addbyurl";
+      const go=()=>{location.href="intent://"+page+"#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url="+encodeURIComponent("https://"+page)+";end";};
+      let done=false;const once=()=>{if(!done){done=true;go();}};
+      if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(u.https).then(once,()=>{prompt("Copia questo indirizzo, poi tocca OK:",u.https);once();});
+      else{prompt("Copia questo indirizzo, poi tocca OK:",u.https);once();}
+      setTimeout(once,1500);
+      return;
+    }
+    location.href=u.webcal;
   }
   let steps,alt;
   if(WORKER){
