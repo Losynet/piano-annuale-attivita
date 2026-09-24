@@ -96,6 +96,8 @@ select{font:inherit;padding:6px 10px;border-radius:10px;border:1.5px solid var(-
 .btn2{appearance:none;border:1.5px solid var(--viola);color:var(--viola);background:transparent;font-weight:700;padding:10px 14px;border-radius:12px;cursor:pointer;font-size:.95rem}
 .btn2.solid{background:var(--viola);color:var(--on)}
 .btn2:disabled{opacity:.35;cursor:not-allowed}
+a.btn,a.btn2{display:inline-block;text-decoration:none;text-align:center;-webkit-tap-highlight-color:transparent}
+a[aria-disabled="true"]{opacity:.35;pointer-events:none}
 .small{font-size:.85rem;color:var(--ink2);margin:10px 0 0}
 .listhead{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:10px}
 .listhead h2{margin:0}
@@ -162,7 +164,7 @@ footer p{margin:0 0 10px;max-width:62ch}
     <div class="box">
       <ol class="steps" id="steps"></ol>
       <div class="acts">
-        <button class="btn2 solid" id="add" disabled>Aggiungi al calendario</button>
+        <a class="btn2 solid" id="add" href="#" role="button" aria-disabled="true">Aggiungi al calendario</a>
         <button class="btn2" id="dl2" disabled>Scarica il file</button>
       </div>
       <p class="small" id="howAlt"></p>
@@ -183,7 +185,7 @@ footer p{margin:0 0 10px;max-width:62ch}
   <footer>
     <h2>Da sapere</h2>
     <p>Se il piano cambia, aggiungi di nuovo gli appuntamenti: quelli già presenti vengono aggiornati invece che duplicati sulla maggior parte dei calendari. Quelli che togli dall'app vanno cancellati anche dal calendario del telefono.</p>
-    <p>Le date riproducono il Piano annuale delle attività 2026/27, che può subire variazioni. In caso di dubbio fanno fede le comunicazioni ufficiali della scuola. Le durate di collegi e dipartimenti sono indicative.</p>
+    <p>Le date riproducono il Piano annuale delle attività 2026/27, che può subire variazioni. In caso di dubbio fanno fede le comunicazioni ufficiali della scuola. Come nel piano, per ogni impegno è indicata solo l'ora di inizio, salvo i casi in cui il piano riporta anche l'ora di fine.</p>
   </footer>
 </div>
 
@@ -191,7 +193,7 @@ footer p{margin:0 0 10px;max-width:62ch}
 
 <div class="bar"><div class="iosnote" id="iosnote" hidden>Su iPhone gli appuntamenti si aggiungono al calendario solo da Safari: copia l'indirizzo di questa pagina e aprilo in Safari.</div><div class="bar-in">
   <div class="count" id="count" aria-live="polite">Nessun appuntamento</div>
-  <button class="btn" id="dl" disabled>Aggiungi al calendario</button>
+  <a class="btn" id="dl" href="#" role="button" aria-disabled="true">Aggiungi al calendario</a>
 </div></div>
 
 <script>
@@ -250,7 +252,7 @@ const BLOCKS=[
   ["CLA","cdc",["2027-06-14"],"I A@13.15|II A@14.00|III A@14.45|IV A@15.30"],
 ];
 
-const DUR="Durata indicativa: il piano indica solo l'ora di inizio.";
+const DUR="";
 const IIS="I.I.S. Pisticci – Montalbano Jonico (sede da confermare)";
 const GLOC="c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)";
 const GEN=[
@@ -325,7 +327,8 @@ function compute(st,today){
     if(!g.ist.some(has)) continue;
     if((g.cat==="coll"&&!o.coll)||(g.cat==="fam"&&!o.fam)||(g.cat==="glo"&&!o.glo)||(g.cat==="cal"&&!o.cal)) continue;
     if(g.tri&&!tri) continue;
-    const ev={...g};
+    const ev={...g};ev.fin=!!g.e;
+    // fine solo interna, per il controllo delle sovrapposizioni
     if(!ev.all&&!ev.e) ev.e=fromMin(hm(ev.s)+ev.dur);
     if(!ev.loc) ev.loc=g.ist.length===1?IST[g.ist[0]].loc:IIS;
     ev.place=g.ist.length===ALL.length?"Tutto l'istituto":g.ist.filter(has).map(i=>IST[i].nome).join(", ");
@@ -378,7 +381,7 @@ function buildICS(list,alarm){
       if(alarm!=="0"&&e.cat!=="cal") L.push(...alarmBlock("-PT15H"));
     }else{
       const d=e.d.replace(/-/g,"");
-      L.push("DTSTART;TZID=Europe/Rome:"+d+"T"+e.s.replace(":","")+"00","DTEND;TZID=Europe/Rome:"+d+"T"+e.e.replace(":","")+"00");
+      L.push("DTSTART;TZID=Europe/Rome:"+d+"T"+e.s.replace(":","")+"00","DTEND;TZID=Europe/Rome:"+d+"T"+(e.fin?e.e:e.s).replace(":","")+"00");
       if(alarm==="60"||alarm==="both") L.push(...alarmBlock("-PT1H"));
       if(alarm==="1440"||alarm==="both") L.push(...alarmBlock("-P1D"));
     }
@@ -391,7 +394,7 @@ function gcal(e){
   const p=new URLSearchParams({action:"TEMPLATE",text:e.cat==="classe"?e.t+", "+e.place:e.t,
     details:(e.note?e.note+"\n":"")+"Piano annuale delle attività 2026/27",location:e.loc||"",ctz:"Europe/Rome"});
   const d0=e.d.replace(/-/g,"");
-  p.set("dates",e.all?d0+"/"+addDays(e.to||e.d,1).replace(/-/g,""):d0+"T"+e.s.replace(":","")+"00/"+d0+"T"+e.e.replace(":","")+"00");
+  p.set("dates",e.all?d0+"/"+addDays(e.to||e.d,1).replace(/-/g,""):d0+"T"+e.s.replace(":","")+"00/"+d0+"T"+(e.fin?e.e:e.s).replace(":","")+"00");
   return "https://calendar.google.com/calendar/render?"+p.toString();
 }
 
@@ -471,7 +474,7 @@ function init(){
         let when;
         if(e.all){if(e.to){const t=parseD(e.to);when="Dal "+dt.getDate()+(t.getMonth()!==dt.getMonth()?" "+MESI[dt.getMonth()]:"")+" al "+t.getDate()+" "+MESI[t.getMonth()]+(t.getFullYear()!==dt.getFullYear()?" "+t.getFullYear():"");}
                   else when="Tutto il giorno";}
-        else when=e.s.replace(":",".")+" – "+e.e.replace(":",".");
+        else when=e.fin?e.s.replace(":",".")+" – "+e.e.replace(":","."):"Ore "+e.s.replace(":",".");
         box.append(el("div",{class:"ev",style:"--c:"+COL[e.cat]},
           el("div",{class:"leaf"},el("small",{text:GG[dt.getDay()]}),el("strong",{text:String(dt.getDate())})),
           el("div",{class:"ev-b"},el("h4",{text:e.t}),el("div",{class:"meta"},el("b",{text:when}),"  "+e.place),
@@ -498,7 +501,8 @@ function init(){
     const n=list.length;
     $("count").replaceChildren(...[n?(n===1?"1 appuntamento":n+" appuntamenti"):"Nessun appuntamento",
       clashes?el("small",{text:clashes===1?"1 sovrapposizione":clashes+" sovrapposizioni"}):null].filter(Boolean));
-    for(const id of ["dl","add","dl2","print"])$(id).disabled=!n;
+    for(const id of ["dl2","print"])$(id).disabled=!n;
+    for(const id of ["dl","add"])$(id).setAttribute("aria-disabled",String(!n));
     $("howHint").textContent=n?"Segui questi passaggi: bastano pochi secondi.":"Scegli prima un indirizzo e le classi.";
   }
   function renderAll(){save();renderIst();renderCls();renderList();}
@@ -519,12 +523,13 @@ function init(){
     const url=URL.createObjectURL(blob);const a=el("a",{href:url,download:FN});
     document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),10000);
   }
-  function add(){
-    if(!current.length)return;
+  function add(ev){
+    if(!current.length){ev.preventDefault();return;}
     if(iOS&&!inApp){
-      // Safari apre direttamente l'anteprima del Calendario con «Aggiungi tutti»
-      location.href="data:text/calendar;charset=utf-8,"+encodeURIComponent(ics());
-    }else download();
+      // Vero link toccato dall'utente: Safari apre l'anteprima del Calendario
+      // ogni volta (la navigazione via script veniva ignorata dopo la prima).
+      ev.currentTarget.href="data:text/calendar;charset=utf-8,"+encodeURIComponent(ics());
+    }else{ev.preventDefault();download();}
   }
   let steps,alt;
   if(iOS&&inApp){
@@ -566,7 +571,7 @@ function init(){
     for(const e of current){
       const dt=parseD(e.d),mk=dt.getFullYear()+"-"+dt.getMonth();
       if(mk!==lastM){lastM=mk;const m=MESI[dt.getMonth()];tb.append(el("tr",{class:"pm"},el("td",{colspan:"3",text:m[0].toUpperCase()+m.slice(1)+" "+dt.getFullYear()})));}
-      const when=e.all?(e.to?"dal "+dt.getDate()+" al "+parseD(e.to).getDate()+" "+MESI[parseD(e.to).getMonth()]:"tutto il giorno"):e.s.replace(":",".")+"–"+e.e.replace(":",".");
+      const when=e.all?(e.to?"dal "+dt.getDate()+" al "+parseD(e.to).getDate()+" "+MESI[parseD(e.to).getMonth()]:"tutto il giorno"):(e.fin?e.s.replace(":",".")+"–"+e.e.replace(":","."):"ore "+e.s.replace(":","."));
       tb.append(el("tr",{},
         el("td",{text:GG[dt.getDay()]+" "+dt.getDate()}),
         el("td",{text:when}),
