@@ -654,9 +654,9 @@ function init(){
     if(WORKER){
       // Abbonamento: il calendario si aggiorna da solo quando cambia il piano
       ev.preventDefault();
-      if(iscritto()&&!confirm("Risulti già iscritto da questo dispositivo.\n\nSe nel Calendario hai già «Impegni scuola 2026/27» non serve altro: le modifiche arrivano da sole, e iscriverti di nuovo crea un calendario doppio.\n\nSe l'iscrizione non era andata a buon fine, tocca OK."))return;
+      if(iscritto()&&!confirm("Non serve iscriversi di nuovo per cambiare le spunte, gli appuntamenti o le classi: le modifiche sono già state inviate e il tuo calendario le riceve da solo (il telefono può metterci da qualche minuto a qualche ora).\n\nTocca OK solo se nel Calendario NON hai «Impegni scuola 2026/27», per esempio perché l'iscrizione non era andata a buon fine: altrimenti crei un calendario doppio."))return;
       try{localStorage.setItem(SKEY,"1");}catch(_){}
-      dopoSalvataggio(()=>iscrivi(ev.currentTarget));
+      dopoSalvataggio(()=>{if(window.__etichetta)window.__etichetta();iscrivi();});
       return;
     }
     if(iOS&&standalone){ev.preventDefault();apriInSafari();return;}
@@ -673,7 +673,7 @@ function init(){
       }
     }else{ev.preventDefault();download();}
   }
-  function iscrivi(a){
+  function iscrivi(){
     const u=subLinks();
     if(android){
       // Android: l'app Google Calendar non aggiunge calendari esterni.
@@ -690,7 +690,8 @@ function init(){
   }
   let steps,alt;
   if(WORKER){
-    for(const id of ["add","dl"])$(id).textContent="Iscriviti al calendario";
+    window.__etichetta=()=>{for(const id of ["add","dl"])$(id).textContent=iscritto()?"Iscriviti di nuovo (le modifiche non lo richiedono)":"Iscriviti al calendario";};
+    window.__etichetta();
     if(android){
       steps=["Tocca «Iscriviti al calendario»: l'indirizzo del calendario viene copiato e si apre Google Calendar in Chrome, alla pagina «Aggiungi da URL».",
              "Tieni premuto nel campo «URL del calendario», scegli «Incolla» e tocca «Aggiungi calendario».",
