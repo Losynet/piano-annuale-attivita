@@ -1,4 +1,4 @@
-# Configurazione del Worker di Cloudflare per «I miei impegni 2026/27».
+# Configurazione del Worker di Cloudflare «I miei impegni 2026/27».
 # Cloudflare legge questo file dal repository GitHub e pubblica worker.js da solo.
 name = "impegni"
 main = "worker.js"
