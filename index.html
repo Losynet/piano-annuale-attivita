@@ -101,6 +101,15 @@ select{font:inherit;padding:6px 10px;border-radius:10px;border:1.5px solid var(-
 .btn2.solid{background:var(--viola);color:var(--on)}
 .btn2:disabled{opacity:.35;cursor:not-allowed}
 html.abbonamento.dev-ios .gcal{display:none}
+.btn{min-width:0;line-height:1.2;flex:0 1 auto}
+.count{min-width:0}
+html.iscritto #dl{background:transparent;color:var(--mare);border:1.5px solid var(--mare);padding:10px 12px;animation:okpop .45s}
+html.iscritto #dl.agg{color:var(--ink2);border-color:var(--line);animation:none}
+html.iscritto #dl.err{color:var(--warn);border-color:var(--warn)}
+@keyframes okpop{0%{transform:scale(1.08)}100%{transform:scale(1)}}
+#estrema>summary{cursor:pointer;color:var(--ink2);font-size:.9rem;padding:2px 0}
+html:not(.iscritto) #estrema>summary{display:none}
+#okline{margin:0 0 10px;font-size:.95rem}
 a.btn,a.btn2{display:inline-block;text-decoration:none;text-align:center;-webkit-tap-highlight-color:transparent}
 a[aria-disabled="true"]{opacity:.35;pointer-events:none}
 .small{font-size:.85rem;color:var(--ink2);margin:10px 0 0}
@@ -167,13 +176,18 @@ footer p{margin:0 0 10px;max-width:62ch}
     <h2>Aggiungi al calendario</h2>
     <p class="hint" id="howHint">Scegli prima un indirizzo e le classi.</p>
     <div class="box">
-      <ol class="steps" id="steps"></ol>
-      <div class="acts">
-        <a class="btn2 solid" id="add" href="#" role="button" aria-disabled="true">Aggiungi al calendario</a>
-        <button class="btn2" id="dl2" disabled>Scarica il file</button>
-        <button class="btn2" id="copyUrl" hidden disabled>Copia l'indirizzo del calendario</button>
-      </div>
-      <p class="small" id="howAlt"></p>
+      <p id="okline" hidden><strong>✓ Sei iscritto.</strong> Per cambiare classi, appuntamenti o spunte (collegi, incontri con le famiglie, calendario scolastico…) basta modificarli qui sopra: il calendario sul telefono si aggiorna da solo, senza iscriverti di nuovo.</p>
+      <details id="estrema" open>
+        <summary>Non vedi il calendario sul telefono? Iscriviti di nuovo</summary>
+        <p class="small" id="estremaNota" hidden>Serve solo se «Impegni scuola 2026/27» non compare in Calendario, per esempio perché l'iscrizione non era andata a buon fine. Altrimenti ti ritroveresti un calendario doppio.</p>
+        <ol class="steps" id="steps"></ol>
+        <div class="acts">
+          <a class="btn2 solid" id="add" href="#" role="button" aria-disabled="true">Aggiungi al calendario</a>
+          <button class="btn2" id="dl2" disabled>Scarica il file</button>
+          <button class="btn2" id="copyUrl" hidden disabled>Copia l'indirizzo del calendario</button>
+        </div>
+        <p class="small" id="howAlt"></p>
+      </details>
       <p class="small" id="sync" hidden></p>
       <p class="small" id="dup" hidden>Controllo: in Calendario, tocca «Calendari» in basso. Se «Impegni scuola 2026/27» compare più volte, tieni un solo calendario ed elimina gli altri (tocca ⓘ accanto al nome, poi «Elimina calendario»).</p>
       <p class="small" id="err" hidden style="color:var(--warn)"></p>
@@ -528,8 +542,9 @@ function init(){
       clashes?el("small",{text:clashes===1?"1 sovrapposizione":clashes+" sovrapposizioni"}):null].filter(Boolean));
     for(const id of ["dl2","print","copyUrl"])$(id).disabled=!n;
     for(const id of ["dl","add"])$(id).setAttribute("aria-disabled",String(!n));
-    $("howHint").textContent=n?(daHome?"Le tue scelte sono arrivate dall'icona: ora tocca «Aggiungi al calendario».":"Passaggi per "+DEVNOME+": bastano pochi secondi."):"Scegli prima un indirizzo e le classi.";
+    $("howHint").textContent=(window.__isc&&window.__isc()&&n)?"Cambia le spunte o gli impegni qui sotto: il calendario si aggiorna da solo.":n?(daHome?"Le tue scelte sono arrivate dall'icona: ora tocca «Aggiungi al calendario».":"Passaggi per "+DEVNOME+": bastano pochi secondi."):"Scegli prima un indirizzo e le classi.";
     if(window.__syncIcs)window.__syncIcs();
+    if(window.__ui)window.__ui();
   }
   function renderAll(){save();renderIst();renderCls();renderList();}
 
@@ -606,18 +621,33 @@ function init(){
   }
   const iscritto=()=>{try{return localStorage.getItem(SKEY)==="1";}catch(_){return false;}};
   const statoJSON=()=>JSON.stringify({ind:st.ind,cls:st.cls,hidden:st.hidden,opts:st.opts});
-  let lastSent=null,syncTimer=null;
+  let lastSent=null,syncTimer=null,syncSt="ok",wasIsc=null;
+  window.__isc=iscritto;
   function setSync(t,bad){const b=$("sync");b.hidden=false;b.textContent=t;b.style.color=bad?"var(--warn)":"";}
+  // Stato dell'aggiornamento mostrato nel pulsante in basso e nella sezione dei passaggi
+  function ui(){
+    const isc=iscritto();
+    document.documentElement.classList.toggle("iscritto",isc);
+    $("okline").hidden=!isc;$("estremaNota").hidden=!isc;
+    if(isc!==wasIsc){$("estrema").open=!isc;wasIsc=isc;}
+    const dl=$("dl");
+    if(isc){dl.textContent={agg:"Aggiorno…",ok:"✓ Aggiornato",err:"Non aggiornato"}[syncSt];dl.className="btn "+syncSt;}
+    else{dl.textContent="Iscriviti al calendario";dl.className="btn";}
+    $("add").textContent=isc?"Iscriviti di nuovo":"Iscriviti al calendario";
+  }
+  window.__ui=ui;
+  function setSt(x){syncSt=x;ui();}
   function syncNow(){
     if(!WORKER||!iscritto())return;
     const body=statoJSON();if(body===lastSent)return;
+    setSt("agg");
     fetch(W0+"/stato/"+token(),{method:"PUT",body,headers:{"Content-Type":"application/json"},keepalive:true})
-      .then(r=>{if(r.ok){lastSent=body;setSync("Scelte salvate: il calendario in abbonamento si aggiornerà da solo.");}
-                else if(r.status===501)setSync("Il calendario non può ricevere le modifiche: per applicarle iscriviti di nuovo.",true);
+      .then(r=>{if(r.ok){lastSent=body;setSt("ok");setSync("Calendario aggiornato: le tue modifiche sono state inviate. Sul telefono compaiono da qualche minuto a qualche ora.");}
+                else if(r.status===501){setSt("err");setSync("Il calendario non può ricevere le modifiche: per applicarle iscriviti di nuovo.",true);}
                 else throw new Error(r.status);})
-      .catch(()=>setSync("Non riesco a salvare le modifiche (connessione assente?). Riprovo alla prossima modifica.",true));
+      .catch(()=>{setSt("err");setSync("Non riesco a inviare le modifiche (connessione assente?). Tocca «Non aggiornato» per riprovare.",true);});
   }
-  window.__onSave=()=>{clearTimeout(syncTimer);syncTimer=setTimeout(syncNow,800);};
+  window.__onSave=()=>{if(iscritto()&&statoJSON()!==lastSent)setSt("agg");clearTimeout(syncTimer);syncTimer=setTimeout(syncNow,800);};
   if(WORKER&&iscritto()){setSync("Sei iscritto: ogni modifica fatta qui arriva da sola al tuo calendario.");syncNow();}
   // L'indirizzo dell'abbonamento è SEMPRE lo stesso (solo il codice): se cambiasse, il telefono
   // lo vedrebbe come un altro calendario e gli appuntamenti comparirebbero doppi.
@@ -654,9 +684,15 @@ function init(){
     if(WORKER){
       // Abbonamento: il calendario si aggiorna da solo quando cambia il piano
       ev.preventDefault();
+      if(iscritto()&&ev.currentTarget.id==="dl"){
+        // Già iscritto: il pulsante in basso è solo l'indicatore dello stato
+        if(syncSt==="err"){lastSent=null;syncNow();}
+        else $("collega").scrollIntoView({behavior:"smooth",block:"start"});
+        return;
+      }
       if(iscritto()&&!confirm("Non serve iscriversi di nuovo per cambiare le spunte, gli appuntamenti o le classi: le modifiche sono già state inviate e il tuo calendario le riceve da solo (il telefono può metterci da qualche minuto a qualche ora).\n\nTocca OK solo se nel Calendario NON hai «Impegni scuola 2026/27», per esempio perché l'iscrizione non era andata a buon fine: altrimenti crei un calendario doppio."))return;
       try{localStorage.setItem(SKEY,"1");}catch(_){}
-      dopoSalvataggio(()=>{if(window.__etichetta)window.__etichetta();iscrivi();});
+      dopoSalvataggio(()=>{ui();iscrivi();});
       return;
     }
     if(iOS&&standalone){ev.preventDefault();apriInSafari();return;}
@@ -690,8 +726,7 @@ function init(){
   }
   let steps,alt;
   if(WORKER){
-    window.__etichetta=()=>{for(const id of ["add","dl"])$(id).textContent=iscritto()?"Iscriviti di nuovo (le modifiche non lo richiedono)":"Iscriviti al calendario";};
-    window.__etichetta();
+    ui();
     if(android){
       steps=["Tocca «Iscriviti al calendario»: l'indirizzo del calendario viene copiato e si apre Google Calendar in Chrome, alla pagina «Aggiungi da URL».",
              "Tieni premuto nel campo «URL del calendario», scegli «Incolla» e tocca «Aggiungi calendario».",
