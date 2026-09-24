@@ -284,7 +284,7 @@ footer p{margin:0 0 10px;max-width:62ch}
 const D=JSON.parse(document.getElementById("dati").textContent);
 /* Indirizzo del Worker di Cloudflare che genera i calendari in abbonamento.
    Lascia "" per usare solo lo scaricamento del file. Esempio: "https://impegni.nome.workers.dev" */
-const WORKER="";
+const WORKER="https://impegni.appscuolalosenno.workers.dev";
 /*CORE-INIZIO*/
 const {IST,ORD,IND,K,MP,BLOCKS,GEN,IIS,GLOC}=D;const ALL=ORD;
 /* ---------- helpers ---------- */
@@ -609,7 +609,7 @@ function init(){
     if(WORKER){
       // Abbonamento: il calendario si aggiorna da solo quando cambia il piano
       try{localStorage.setItem(SKEY,"1");}catch(_){}
-      syncNow();
+      try{syncNow();}catch(_){}
       const u=subLinks(),a=ev.currentTarget;
       if(android){a.href=u.google;a.target="_blank";}else{a.href=u.webcal;a.removeAttribute("target");}
       return;
