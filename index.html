@@ -172,6 +172,7 @@ footer p{margin:0 0 10px;max-width:62ch}
         <button class="btn2" id="dl2" disabled>Scarica il file</button>
       </div>
       <p class="small" id="howAlt"></p>
+      <p class="small" id="sync" hidden></p>
       <p class="small" id="err" hidden style="color:var(--warn)"></p>
     </div>
   </section>
@@ -201,100 +202,91 @@ footer p{margin:0 0 10px;max-width:62ch}
   <a class="btn" id="dl" href="#" role="button" aria-disabled="true">Aggiungi al calendario</a>
 </div></div>
 
-<script>
-"use strict";
-const IST={
-  IPS:{nome:"IPSEOA",sede:"Alberghiero, Marconia",loc:"IPSEOA, Via Nazionale, Marconia di Pisticci (MT)",
-       classi:["I A","I B","I C","II A","II B","III A Eno","III B Eno","III A AT","IV A Eno","IV A Sala","V A Eno","V A AT","III AE Serale","V AE Serale"]},
-  ITA:{nome:"ITAA",sede:"Agrario, Marconia",loc:"ITAA, Marconia di Pisticci (MT)",
-       classi:["I A","II A","II B","III B PT","IV A GAT","IV B PT","V A GAT","V B PT","V Serale"]},
-  ITT:{nome:"ITT",sede:"Tecnologico, Pisticci",loc:"ITT, Pisticci (MT)",
-       classi:["I A","II A","II B","III A Inf","III A Tel","IV A Inf","V A Inf"]},
-  CLA:{nome:"Liceo Classico",sede:"Pisticci",loc:"Liceo Classico, Pisticci (MT)",
-       classi:["I A","II A","III A","IV A","V A"]}
-};
-const ORD=["IPS","ITA","ITT","CLA"];
-/* Indirizzi di studio: ciò che il collega sceglie. "sede" collega l'indirizzo agli impegni del piano. */
-const IND=[
-  {id:"CLA",nome:"Liceo Classico",breve:"Liceo Classico",sede:"CLA",luogo:"Pisticci",classi:["I A","II A","III A","IV A","V A"]},
-  {id:"ITA",nome:"Istituto Tecnico Agrario",breve:"Tecnico Agrario",sede:"ITA",luogo:"Marconia",classi:["I A","II A","II B","III B PT","IV A GAT","IV B PT","V A GAT","V B PT","V Serale"]},
-  {id:"IPS",nome:"Istituto Professionale per i Servizi dell'Enogastronomia e l'Ospitalità Alberghiera",breve:"IPSEOA",sede:"IPS",luogo:"Marconia",classi:["I A","I B","I C","II A","II B","III A Eno","III B Eno","III A AT","IV A Eno","IV A Sala","V A Eno","V A AT","III AE Serale","V AE Serale"]},
-  {id:"ITT",nome:"Istituto Tecnico per l'Informatica e le Telecomunicazioni",breve:"ITT Informatica e Telecomunicazioni",sede:"ITT",luogo:"Pisticci",classi:["I A","II A","II B","III A Inf","III A Tel","IV A Inf","V A Inf"]}
-];
-const ALL=ORD, MP=["IPS","ITA","ITT","CLA"];
-const K={cdc:"Consiglio di classe",scr:"Scrutinio del trimestre",d15:"Consiglio di classe, Documento del 15 maggio",fin:"Scrutinio finale"};
-
-const A1="III AE Serale@14.20|V AE Serale@14.40|I A@15.00|I B@15.45|I C@16.30|II A@17.15|II B@18.00";
-const A2="III A Eno@14.30|III B Eno@15.15|III A AT@16.00|IV A Eno@16.45|V A Eno@17.15|V A AT@18.00|IV A Sala@18.45";
-const B1="V Serale@14.40|I A@15.00|II A@15.45|II B@16.30";
-const B2="IV A GAT@15.00|V A GAT@15.45|III B PT@16.00|IV B PT@16.45|V B PT@17.15";
-const C0="I A@14.30|II A@15.15|II B@16.00|III A Inf@16.45|III A Tel@17.30|IV A Inf@18.15|V A Inf@19.00";
-const D0="I A@15.00|II A@15.45|III A@16.30|IV A@17.15|V A@18.00";
-
-const BLOCKS=[
-  ["IPS","cdc",["2026-10-06","2026-11-16","2027-03-12","2027-05-21"],A1],
-  ["IPS","cdc",["2026-10-07","2026-11-17","2027-03-15","2027-05-24"],A2],
-  ["IPS","scr",["2027-01-11"],A1],["IPS","scr",["2027-01-12"],A2],
+<script type="application/json" id="dati">
+{
+"IST":{"IPS":{"nome":"IPSEOA","sede":"Alberghiero, Marconia","loc":"IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","classi":["I A","I B","I C","II A","II B","III A Eno","III B Eno","III A AT","IV A Eno","IV A Sala","V A Eno","V A AT","III AE Serale","V AE Serale"]},"ITA":{"nome":"ITAA","sede":"Agrario, Marconia","loc":"ITAA, Marconia di Pisticci (MT)","classi":["I A","II A","II B","III B PT","IV A GAT","IV B PT","V A GAT","V B PT","V Serale"]},"ITT":{"nome":"ITT","sede":"Tecnologico, Pisticci","loc":"ITT, Pisticci (MT)","classi":["I A","II A","II B","III A Inf","III A Tel","IV A Inf","V A Inf"]},"CLA":{"nome":"Liceo Classico","sede":"Pisticci","loc":"Liceo Classico, Pisticci (MT)","classi":["I A","II A","III A","IV A","V A"]}},
+"ORD":["IPS","ITA","ITT","CLA"],
+"MP":["IPS","ITA","ITT","CLA"],
+"IND":[
+  {"id":"CLA","nome":"Liceo Classico","breve":"Liceo Classico","sede":"CLA","luogo":"Pisticci","classi":["I A","II A","III A","IV A","V A"]},
+  {"id":"ITA","nome":"Istituto Tecnico Agrario","breve":"Tecnico Agrario","sede":"ITA","luogo":"Marconia","classi":["I A","II A","II B","III B PT","IV A GAT","IV B PT","V A GAT","V B PT","V Serale"]},
+  {"id":"IPS","nome":"Istituto Professionale per i Servizi dell'Enogastronomia e l'Ospitalità Alberghiera","breve":"IPSEOA","sede":"IPS","luogo":"Marconia","classi":["I A","I B","I C","II A","II B","III A Eno","III B Eno","III A AT","IV A Eno","IV A Sala","V A Eno","V A AT","III AE Serale","V AE Serale"]},
+  {"id":"ITT","nome":"Istituto Tecnico per l'Informatica e le Telecomunicazioni","breve":"ITT Informatica e Telecomunicazioni","sede":"ITT","luogo":"Pisticci","classi":["I A","II A","II B","III A Inf","III A Tel","IV A Inf","V A Inf"]}
+],
+"K":{"cdc":"Consiglio di classe","scr":"Scrutinio del trimestre","d15":"Consiglio di classe, Documento del 15 maggio","fin":"Scrutinio finale"},
+"IIS":"I.I.S. Pisticci – Montalbano Jonico (sede da confermare)",
+"GLOC":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)",
+"BLOCKS":[
+  ["IPS","cdc",["2026-10-06","2026-11-16","2027-03-12","2027-05-21"],"III AE Serale@14.20|V AE Serale@14.40|I A@15.00|I B@15.45|I C@16.30|II A@17.15|II B@18.00"],
+  ["IPS","cdc",["2026-10-07","2026-11-17","2027-03-15","2027-05-24"],"III A Eno@14.30|III B Eno@15.15|III A AT@16.00|IV A Eno@16.45|V A Eno@17.15|V A AT@18.00|IV A Sala@18.45"],
+  ["IPS","scr",["2027-01-11"],"III AE Serale@14.20|V AE Serale@14.40|I A@15.00|I B@15.45|I C@16.30|II A@17.15|II B@18.00"],
+  ["IPS","scr",["2027-01-12"],"III A Eno@14.30|III B Eno@15.15|III A AT@16.00|IV A Eno@16.45|V A Eno@17.15|V A AT@18.00|IV A Sala@18.45"],
   ["IPS","d15",["2027-05-07"],"V AE Serale@15.00|V A Eno@16.00|V A AT@17.00"],
   ["IPS","fin",["2027-06-08"],"V AE Serale@14.30|V A Eno@15.15|V A AT@16.00"],
   ["IPS","cdc",["2027-06-11"],"III AE Serale@17.00|I A@17.45|I B@18.30|I C@19.15"],
   ["IPS","cdc",["2027-06-14"],"II A@08.00|II B@08.45|III A Eno@09.30|III B Eno@10.15|III A AT@11.00|IV A Eno@11.45|IV A Sala@12.30"],
-  ["ITA","cdc",["2026-10-02","2026-11-11","2027-03-09","2027-05-18"],B1],
-  ["ITA","cdc",["2026-10-05","2026-11-12","2027-03-10","2027-05-19"],B2],
+  ["ITA","cdc",["2026-10-02","2026-11-11","2027-03-09","2027-05-18"],"V Serale@14.40|I A@15.00|II A@15.45|II B@16.30"],
+  ["ITA","cdc",["2026-10-05","2026-11-12","2027-03-10","2027-05-19"],"IV A GAT@15.00|V A GAT@15.45|III B PT@16.00|IV B PT@16.45|V B PT@17.15"],
   ["ITA","scr",["2027-01-13"],"V Serale@14.40|I A@15.00|II A@15.45|II B@16.30|IV A GAT@16.45|V A GAT@17.15|III B PT@18.00|IV B PT@18.45|V B PT@19.15"],
   ["ITA","d15",["2027-05-06"],"V Serale@15.00|V A GAT@16.00|V B PT@17.00"],
   ["ITA","fin",["2027-06-08"],"V A GAT@16.45|V B PT@17.30|V Serale@18.15"],
   ["ITA","cdc",["2027-06-11"],"IV A GAT@08.00|III B PT@08.45|IV B PT@09.30|I A@10.15|II A@11.00|II B@11.45"],
-  ["ITT","cdc",["2026-10-01","2026-11-13","2027-03-11","2027-05-20"],C0],
-  ["ITT","scr",["2027-01-14"],C0],
+  ["ITT","cdc",["2026-10-01","2026-11-13","2027-03-11","2027-05-20"],"I A@14.30|II A@15.15|II B@16.00|III A Inf@16.45|III A Tel@17.30|IV A Inf@18.15|V A Inf@19.00"],
+  ["ITT","scr",["2027-01-14"],"I A@14.30|II A@15.15|II B@16.00|III A Inf@16.45|III A Tel@17.30|IV A Inf@18.15|V A Inf@19.00"],
   ["ITT","d15",["2027-05-05"],"V A Inf@16.00"],
   ["ITT","fin",["2027-06-08"],"V A Inf@19.00"],
   ["ITT","cdc",["2027-06-11"],"I A@12.30|II A@13.15|II B@14.00|III A Inf@14.45|III A Tel@15.30|IV A Inf@16.15"],
-  ["CLA","cdc",["2026-10-08","2026-11-18","2027-03-08","2027-05-17"],D0],
+  ["CLA","cdc",["2026-10-08","2026-11-18","2027-03-08","2027-05-17"],"I A@15.00|II A@15.45|III A@16.30|IV A@17.15|V A@18.00"],
   ["CLA","scr",["2027-01-15"],"I A@15.00|II A@15.30|III A@16.00|IV A@16.30|V A@17.00"],
   ["CLA","d15",["2027-05-04"],"V A@15.00"],
   ["CLA","fin",["2027-06-08"],"V A@19.45"],
-  ["CLA","cdc",["2027-06-14"],"I A@13.15|II A@14.00|III A@14.45|IV A@15.30"],
-];
-
-const DUR="";
-const IIS="I.I.S. Pisticci – Montalbano Jonico (sede da confermare)";
-const GLOC="c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)";
-const GEN=[
-  {d:"2026-09-01",s:"10:00",dur:120,cat:"coll",t:"Collegio dei docenti",ist:ALL,loc:IIS,note:DUR},
-  {d:"2026-09-10",s:"09:00",dur:120,cat:"coll",t:"Collegio dei docenti",ist:ALL,loc:IIS,note:DUR},
-  {d:"2026-10-23",s:"17:00",dur:120,cat:"coll",t:"Collegio dei docenti",ist:ALL,loc:IIS,note:DUR},
-  {d:"2027-05-27",s:"17:00",dur:120,cat:"coll",t:"Collegio dei docenti",ist:ALL,loc:IIS,note:DUR},
-  {d:"2027-06-14",s:"17:00",dur:120,cat:"coll",t:"Collegio dei docenti",ist:ALL,loc:IIS,note:DUR},
-  {d:"2026-10-27",s:"08:00",dur:120,cat:"coll",t:"Elezioni degli organi collegiali, componente alunni",ist:ALL,note:"A partire dalle 8.00."},
-  {d:"2026-10-27",s:"16:00",dur:120,cat:"coll",t:"Elezioni degli organi collegiali, componente genitori",ist:ALL,note:"A partire dalle 16.00."},
-  {d:"2027-02-24",s:"16:00",dur:120,cat:"coll",t:"Dipartimenti per indirizzo",ist:MP,loc:IIS,note:DUR},
-  {d:"2027-05-03",all:true,cat:"coll",t:"Dipartimenti per aree disciplinari",ist:ALL,loc:"Sede centrale IPSEOA, Marconia di Pisticci (MT)",note:"Tutti gli indirizzi. Orario da concordare."},
-  {d:"2026-12-01",s:"16:30",e:"19:30",cat:"fam",t:"1° incontro con le famiglie, Liceo Classico e ITT",ist:["CLA","ITT"],loc:"Pisticci (MT)"},
-  {d:"2026-12-02",s:"16:30",e:"19:30",cat:"fam",t:"1° incontro con le famiglie, IPSEOA",ist:["IPS"]},
-  {d:"2026-12-03",s:"16:30",e:"19:30",cat:"fam",t:"1° incontro con le famiglie, ITAA",ist:["ITA"]},
-  {d:"2027-04-26",s:"16:30",e:"19:30",cat:"fam",t:"2° incontro con le famiglie, Liceo Classico e ITT",ist:["CLA","ITT"],loc:"Pisticci (MT)"},
-  {d:"2027-04-27",s:"16:30",e:"19:30",cat:"fam",t:"2° incontro con le famiglie, IPSEOA",ist:["IPS"]},
-  {d:"2027-04-28",s:"16:30",e:"19:30",cat:"fam",t:"2° incontro con le famiglie, ITAA",ist:["ITA"]},
-  {d:"2027-04-30",s:"16:30",e:"19:30",cat:"fam",t:"2° incontro con le famiglie, triennio di tutti gli indirizzi",ist:ALL,loc:IIS,tri:true},
-  {d:"2026-10-27",all:true,cat:"glo",t:"GLO c/o IPSEOA Marconia",ist:MP,loc:GLOC,note:"Orari da definire."},
-  {d:"2026-10-28",all:true,cat:"glo",t:"GLO c/o IPSEOA Marconia",ist:MP,loc:GLOC,note:"Orari da definire."},
-  {d:"2026-10-29",all:true,cat:"glo",t:"GLO c/o IPSEOA Marconia",ist:MP,loc:GLOC,note:"Orari da definire."},
-  {d:"2026-11-05",all:true,cat:"glo",t:"GLO c/o IPSEOA Marconia",ist:MP,loc:GLOC,note:"Orari da definire."},
-  {d:"2026-11-10",all:true,cat:"glo",t:"GLO c/o IPSEOA Marconia",ist:MP,loc:GLOC,note:"Orari da definire."},
-  {d:"2026-11-12",all:true,cat:"glo",t:"GLO c/o IPSEOA Marconia",ist:MP,loc:GLOC,note:"Orari da definire."},
-  {d:"2026-09-14",all:true,cat:"cal",t:"Inizio delle lezioni",ist:["IPS","ITA","ITT"]},
-  {d:"2026-09-16",all:true,cat:"cal",t:"Inizio delle lezioni",ist:["CLA"]},
-  {d:"2026-11-02",all:true,cat:"cal",t:"Lezioni sospese",ist:ALL},
-  {d:"2026-12-07",to:"2026-12-08",all:true,cat:"cal",t:"Lezioni sospese",ist:ALL},
-  {d:"2026-12-22",all:true,cat:"cal",t:"Fine del trimestre",ist:ALL},
-  {d:"2026-12-23",to:"2027-01-06",all:true,cat:"cal",t:"Vacanze di Natale",ist:ALL},
-  {d:"2027-02-08",to:"2027-02-09",all:true,cat:"cal",t:"Lezioni sospese",ist:ALL},
-  {d:"2027-03-25",to:"2027-03-30",all:true,cat:"cal",t:"Vacanze di Pasqua",ist:ALL},
-  {d:"2027-06-02",all:true,cat:"cal",t:"Festa della Repubblica, lezioni sospese",ist:ALL},
-  {d:"2027-06-08",all:true,cat:"cal",t:"Termine delle lezioni",ist:ALL}
-];
-
+  ["CLA","cdc",["2027-06-14"],"I A@13.15|II A@14.00|III A@14.45|IV A@15.30"]
+],
+"GEN":[
+  {"d":"2026-09-01","s":"10:00","dur":120,"cat":"coll","t":"Collegio dei docenti","ist":["IPS","ITA","ITT","CLA"],"loc":"I.I.S. Pisticci – Montalbano Jonico (sede da confermare)","note":""},
+  {"d":"2026-09-10","s":"09:00","dur":120,"cat":"coll","t":"Collegio dei docenti","ist":["IPS","ITA","ITT","CLA"],"loc":"I.I.S. Pisticci – Montalbano Jonico (sede da confermare)","note":""},
+  {"d":"2026-10-23","s":"17:00","dur":120,"cat":"coll","t":"Collegio dei docenti","ist":["IPS","ITA","ITT","CLA"],"loc":"I.I.S. Pisticci – Montalbano Jonico (sede da confermare)","note":""},
+  {"d":"2027-05-27","s":"17:00","dur":120,"cat":"coll","t":"Collegio dei docenti","ist":["IPS","ITA","ITT","CLA"],"loc":"I.I.S. Pisticci – Montalbano Jonico (sede da confermare)","note":""},
+  {"d":"2027-06-14","s":"17:00","dur":120,"cat":"coll","t":"Collegio dei docenti","ist":["IPS","ITA","ITT","CLA"],"loc":"I.I.S. Pisticci – Montalbano Jonico (sede da confermare)","note":""},
+  {"d":"2026-10-27","s":"08:00","dur":120,"cat":"coll","t":"Elezioni degli organi collegiali, componente alunni","ist":["IPS","ITA","ITT","CLA"],"note":"A partire dalle 8.00."},
+  {"d":"2026-10-27","s":"16:00","dur":120,"cat":"coll","t":"Elezioni degli organi collegiali, componente genitori","ist":["IPS","ITA","ITT","CLA"],"note":"A partire dalle 16.00."},
+  {"d":"2027-02-24","s":"16:00","dur":120,"cat":"coll","t":"Dipartimenti per indirizzo","ist":["IPS","ITA","ITT","CLA"],"loc":"I.I.S. Pisticci – Montalbano Jonico (sede da confermare)","note":""},
+  {"d":"2027-05-03","all":true,"cat":"coll","t":"Dipartimenti per aree disciplinari","ist":["IPS","ITA","ITT","CLA"],"loc":"Sede centrale IPSEOA, Marconia di Pisticci (MT)","note":"Tutti gli indirizzi. Orario da concordare."},
+  {"d":"2026-12-01","s":"16:30","e":"19:30","cat":"fam","t":"1° incontro con le famiglie, Liceo Classico e ITT","ist":["CLA","ITT"],"loc":"Pisticci (MT)"},
+  {"d":"2026-12-02","s":"16:30","e":"19:30","cat":"fam","t":"1° incontro con le famiglie, IPSEOA","ist":["IPS"]},
+  {"d":"2026-12-03","s":"16:30","e":"19:30","cat":"fam","t":"1° incontro con le famiglie, ITAA","ist":["ITA"]},
+  {"d":"2027-04-26","s":"16:30","e":"19:30","cat":"fam","t":"2° incontro con le famiglie, Liceo Classico e ITT","ist":["CLA","ITT"],"loc":"Pisticci (MT)"},
+  {"d":"2027-04-27","s":"16:30","e":"19:30","cat":"fam","t":"2° incontro con le famiglie, IPSEOA","ist":["IPS"]},
+  {"d":"2027-04-28","s":"16:30","e":"19:30","cat":"fam","t":"2° incontro con le famiglie, ITAA","ist":["ITA"]},
+  {"d":"2027-04-30","s":"16:30","e":"19:30","cat":"fam","t":"2° incontro con le famiglie, triennio di tutti gli indirizzi","ist":["IPS","ITA","ITT","CLA"],"loc":"I.I.S. Pisticci – Montalbano Jonico (sede da confermare)","tri":true},
+  {"d":"2026-10-27","all":true,"cat":"glo","t":"GLO c/o IPSEOA Marconia","ist":["IPS","ITA","ITT","CLA"],"loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Orari da definire."},
+  {"d":"2026-10-28","all":true,"cat":"glo","t":"GLO c/o IPSEOA Marconia","ist":["IPS","ITA","ITT","CLA"],"loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Orari da definire."},
+  {"d":"2026-10-29","all":true,"cat":"glo","t":"GLO c/o IPSEOA Marconia","ist":["IPS","ITA","ITT","CLA"],"loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Orari da definire."},
+  {"d":"2026-11-05","all":true,"cat":"glo","t":"GLO c/o IPSEOA Marconia","ist":["IPS","ITA","ITT","CLA"],"loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Orari da definire."},
+  {"d":"2026-11-10","all":true,"cat":"glo","t":"GLO c/o IPSEOA Marconia","ist":["IPS","ITA","ITT","CLA"],"loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Orari da definire."},
+  {"d":"2026-11-12","all":true,"cat":"glo","t":"GLO c/o IPSEOA Marconia","ist":["IPS","ITA","ITT","CLA"],"loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Orari da definire."},
+  {"d":"2026-09-14","all":true,"cat":"cal","t":"Inizio delle lezioni","ist":["IPS","ITA","ITT"]},
+  {"d":"2026-09-16","all":true,"cat":"cal","t":"Inizio delle lezioni","ist":["CLA"]},
+  {"d":"2026-11-02","all":true,"cat":"cal","t":"Lezioni sospese","ist":["IPS","ITA","ITT","CLA"]},
+  {"d":"2026-12-07","to":"2026-12-08","all":true,"cat":"cal","t":"Lezioni sospese","ist":["IPS","ITA","ITT","CLA"]},
+  {"d":"2026-12-22","all":true,"cat":"cal","t":"Fine del trimestre","ist":["IPS","ITA","ITT","CLA"]},
+  {"d":"2026-12-23","to":"2027-01-06","all":true,"cat":"cal","t":"Vacanze di Natale","ist":["IPS","ITA","ITT","CLA"]},
+  {"d":"2027-02-08","to":"2027-02-09","all":true,"cat":"cal","t":"Lezioni sospese","ist":["IPS","ITA","ITT","CLA"]},
+  {"d":"2027-03-25","to":"2027-03-30","all":true,"cat":"cal","t":"Vacanze di Pasqua","ist":["IPS","ITA","ITT","CLA"]},
+  {"d":"2027-06-02","all":true,"cat":"cal","t":"Festa della Repubblica, lezioni sospese","ist":["IPS","ITA","ITT","CLA"]},
+  {"d":"2027-06-08","all":true,"cat":"cal","t":"Termine delle lezioni","ist":["IPS","ITA","ITT","CLA"]}
+]
+}
+</script>
+<script>
+"use strict";
+/* I dati del piano sono nel blocco <script id="dati"> qui sopra: li legge anche il Worker di Cloudflare. */
+const D=JSON.parse(document.getElementById("dati").textContent);
+/* Indirizzo del Worker di Cloudflare che genera i calendari in abbonamento.
+   Lascia "" per usare solo lo scaricamento del file. Esempio: "https://impegni.nome.workers.dev" */
+const WORKER="";
+/*CORE-INIZIO*/
+const {IST,ORD,IND,K,MP,BLOCKS,GEN,IIS,GLOC}=D;const ALL=ORD;
 /* ---------- helpers ---------- */
 const pad=n=>String(n).padStart(2,"0");
 const hm=s=>{const [h,m]=s.split(/[.:]/).map(Number);return h*60+m;};
@@ -369,7 +361,7 @@ function hash(s){let x=5381;for(const c of s)x=((x<<5)+x+c.codePointAt(0))>>>0;r
 function buildICS(list,alarm){
   const now=new Date(),st=now.getUTCFullYear()+pad(now.getUTCMonth()+1)+pad(now.getUTCDate())+"T"+pad(now.getUTCHours())+pad(now.getUTCMinutes())+pad(now.getUTCSeconds())+"Z";
   const L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Gianni Losenno per la scuola//Impegni 2026-27//IT","CALSCALE:GREGORIAN","METHOD:PUBLISH",
-    "X-WR-CALNAME:Impegni scuola 2026/27","X-WR-TIMEZONE:Europe/Rome",
+    "X-WR-CALNAME:Impegni scuola 2026/27","REFRESH-INTERVAL;VALUE=DURATION:PT6H","X-PUBLISHED-TTL:PT6H","X-WR-TIMEZONE:Europe/Rome",
     "BEGIN:VTIMEZONE","TZID:Europe/Rome",
     "BEGIN:DAYLIGHT","TZOFFSETFROM:+0100","TZOFFSETTO:+0200","TZNAME:CEST","DTSTART:19700329T020000","RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU","END:DAYLIGHT",
     "BEGIN:STANDARD","TZOFFSETFROM:+0200","TZOFFSETTO:+0100","TZNAME:CET","DTSTART:19701025T030000","RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU","END:STANDARD",
@@ -403,6 +395,15 @@ function gcal(e){
   return "https://calendar.google.com/calendar/render?"+p.toString();
 }
 
+/* Classi scelte per sede, a partire dallo stato salvato */
+function selOf(ind,cls){
+  const sel={};
+  for(const I of IND.filter(I=>ind.includes(I.id))){if(!sel[I.sede])sel[I.sede]=[];
+    for(const c of I.classi)if(cls.includes(I.sede+"|"+c)&&!sel[I.sede].includes(c))sel[I.sede].push(c);}
+  return sel;
+}
+/*CORE-FINE*/
+
 /* ---------- UI ---------- */
 function init(){
   const KEY="impegni-2026-27-v2";
@@ -416,7 +417,7 @@ function init(){
         try{localStorage.setItem(KEY,JSON.stringify(st));}catch(_){}}}catch(_){}
     history.replaceState(null,"",location.pathname+location.search);
   }
-  const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st));}catch(_){}};
+  const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st));}catch(_){}if(window.__onSave)window.__onSave();};
   const $=id=>document.getElementById(id);
   const el=(tag,attrs={},...kids)=>{const n=document.createElement(tag);
     for(const [k,v] of Object.entries(attrs)){if(k==="on")n.addEventListener("click",v);else if(k==="text")n.textContent=v;else n.setAttribute(k,v);}
@@ -550,6 +551,8 @@ function init(){
       .then(()=>{swReady=!!navigator.serviceWorker.controller;window.__syncIcs();}).catch(()=>{});
     navigator.serviceWorker.addEventListener("controllerchange",()=>{swReady=true;window.__syncIcs();});
   }
+  if(WORKER&&!iOS&&!android){const g=el("a",{id:"gsub",href:"#",target:"_blank",text:"Iscriviti con Google Calendar"});$("howAlt").after(g);
+    g.addEventListener("click",()=>{g.href=subLinks().google;});}
   window.__syncIcs=()=>{
     if(!("caches" in window)||!current.length)return;
     try{const body=ics();caches.open("impegni-ics").then(c=>c.put("/__impegni_ics__",new Response(body,{headers:{"Content-Type":"text/calendar; charset=utf-8"}}))).catch(()=>{});}catch(e){showErr(e.message);}
@@ -567,8 +570,50 @@ function init(){
     if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f]}).catch(()=>{});
     else alert("Da qui non posso passare il file al Calendario. Apri l'indirizzo della pagina in Safari e tocca di nuovo «Aggiungi al calendario».");
   }
+  /* ---- Abbonamento con scelte salvate sul Worker ----
+     Ogni dispositivo ha un codice casuale (TOK). L'indirizzo dell'abbonamento resta sempre lo stesso;
+     quando togli/rimetti appuntamenti o cambi classi, le scelte vengono inviate al Worker
+     e il calendario si aggiorna da solo, senza reiscriversi. */
+  const TKEY="impegni-2026-27-token",SKEY="impegni-2026-27-iscritto";
+  const W0=WORKER.replace(/\/$/,"");
+  function token(){
+    let t=null;try{t=localStorage.getItem(TKEY);}catch(_){}
+    if(!t){const b=crypto.getRandomValues(new Uint8Array(18));t=btoa(String.fromCharCode(...b)).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+      try{localStorage.setItem(TKEY,t);}catch(_){}}
+    return t;
+  }
+  const iscritto=()=>{try{return localStorage.getItem(SKEY)==="1";}catch(_){return false;}};
+  const statoJSON=()=>JSON.stringify({ind:st.ind,cls:st.cls,hidden:st.hidden,opts:st.opts});
+  let lastSent=null,syncTimer=null;
+  function setSync(t,bad){const b=$("sync");b.hidden=false;b.textContent=t;b.style.color=bad?"var(--warn)":"";}
+  function syncNow(){
+    if(!WORKER||!iscritto())return;
+    const body=statoJSON();if(body===lastSent)return;
+    fetch(W0+"/stato/"+token(),{method:"PUT",body,headers:{"Content-Type":"application/json"},keepalive:true})
+      .then(r=>{if(r.ok){lastSent=body;setSync("Scelte salvate: il calendario in abbonamento si aggiornerà da solo.");}
+                else if(r.status===501)setSync("Il calendario non può ricevere le modifiche: per applicarle iscriviti di nuovo.",true);
+                else throw new Error(r.status);})
+      .catch(()=>setSync("Non riesco a salvare le modifiche (connessione assente?). Riprovo alla prossima modifica.",true));
+  }
+  window.__onSave=()=>{clearTimeout(syncTimer);syncTimer=setTimeout(syncNow,800);};
+  if(WORKER&&iscritto()){setSync("Sei iscritto: ogni modifica fatta qui arriva da sola al tuo calendario.");syncNow();}
+  function subLinks(){
+    const bytes=new TextEncoder().encode(statoJSON());
+    let bin="";for(const b of bytes)bin+=String.fromCharCode(b);
+    const https=W0+"/c/"+token()+".ics?s="+btoa(bin).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+    const webcal=https.replace(/^https:/,"webcal:");
+    return {https,webcal,google:"https://calendar.google.com/calendar/r?cid="+encodeURIComponent(webcal)};
+  }
   function add(ev){
     if(!current.length){ev.preventDefault();return;}
+    if(WORKER){
+      // Abbonamento: il calendario si aggiorna da solo quando cambia il piano
+      try{localStorage.setItem(SKEY,"1");}catch(_){}
+      syncNow();
+      const u=subLinks(),a=ev.currentTarget;
+      if(android){a.href=u.google;a.target="_blank";}else{a.href=u.webcal;a.removeAttribute("target");}
+      return;
+    }
     if(iOS&&standalone){ev.preventDefault();apriInSafari();return;}
     if(iOS&&!inApp){
       const a=ev.currentTarget;
@@ -584,7 +629,25 @@ function init(){
     }else{ev.preventDefault();download();}
   }
   let steps,alt;
-  if(iOS&&standalone){
+  if(WORKER){
+    for(const id of ["add","dl"])$(id).textContent="Iscriviti al calendario";
+    if(android){
+      steps=["Tocca «Iscriviti al calendario»: si apre Google Calendar.",
+             "Conferma con «Aggiungi»: il calendario compare fra i tuoi e si aggiorna da solo.",
+             "Per togliere appuntamenti o cambiare classi torna qui e modifica: il calendario si aggiorna da solo, senza reiscriverti."];
+      alt="Se Google Calendar non si apre, tocca «Scarica il file» per aggiungere gli appuntamenti una sola volta, senza aggiornamenti.";
+    }else if(iOS){
+      steps=["Tocca «Iscriviti al calendario», poi «Iscriviti».",
+             "Scegli l'account iCloud. Se vuoi i promemoria, disattiva «Rimuovi avvisi». Tocca «Aggiungi».",
+             "Per togliere appuntamenti o cambiare classi torna qui e modifica: il calendario si aggiorna da solo, senza reiscriverti."];
+      alt="In alternativa, «Scarica il file» aggiunge gli appuntamenti una sola volta, senza aggiornamenti.";
+    }else{
+      steps=["Clicca «Iscriviti al calendario»: si apre Calendario di Mac o Outlook e chiede di confermare l'iscrizione.",
+             "Per Google Calendar usa invece il link qui sotto.",
+             "Per togliere appuntamenti o cambiare classi torna qui e modifica: il calendario si aggiorna da solo, senza reiscriverti."];
+      alt="";
+    }
+  }else if(iOS&&standalone){
     steps=["Tocca «Aggiungi al calendario»: la pagina si riapre in Safari con le tue scelte.",
            "In Safari tocca di nuovo «Aggiungi al calendario».",
            "Tocca «Aggiungi tutti», scegli il calendario e poi «Fine»."];
