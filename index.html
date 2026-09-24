@@ -622,7 +622,19 @@ function init(){
       try{localStorage.setItem(SKEY,"1");}catch(_){}
       try{syncNow();}catch(_){}
       const u=subLinks(),a=ev.currentTarget;
-      if(android){a.href=u.google;a.target="_blank";}else{a.href=u.webcal;a.removeAttribute("target");}
+      if(android){
+        // Android: l'app Google Calendar non aggiunge calendari esterni.
+        // Copio l'indirizzo e apro in Chrome (non nell'app) la pagina «Da URL» di Google Calendar.
+        ev.preventDefault();
+        const page="calendar.google.com/calendar/u/0/r/settings/addbyurl";
+        const go=()=>{location.href="intent://"+page+"#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url="+encodeURIComponent("https://"+page)+";end";};
+        let done=false;const once=()=>{if(!done){done=true;go();}};
+        if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(u.https).then(once,()=>{prompt("Copia questo indirizzo, poi tocca OK:",u.https);once();});
+        else{prompt("Copia questo indirizzo, poi tocca OK:",u.https);once();}
+        setTimeout(once,1500);
+        return;
+      }
+      a.href=u.webcal;a.removeAttribute("target");
       return;
     }
     if(iOS&&standalone){ev.preventDefault();apriInSafari();return;}
@@ -643,10 +655,11 @@ function init(){
   if(WORKER){
     for(const id of ["add","dl"])$(id).textContent="Iscriviti al calendario";
     if(android){
-      steps=["Tocca «Iscriviti al calendario». Se Google chiede «Aggiungere questo calendario?», tocca «Aggiungi».",
-             "Controlla nell'app Google Calendar (Menu, Impostazioni) che il nuovo calendario compaia fra i tuoi. Se non c'è, segui le istruzioni qui sotto.",
+      steps=["Tocca «Iscriviti al calendario»: l'indirizzo del calendario viene copiato e si apre Google Calendar in Chrome, alla pagina «Aggiungi da URL».",
+             "Tieni premuto nel campo «URL del calendario», scegli «Incolla» e tocca «Aggiungi calendario».",
+             "Apri l'app Google Calendar, Menu, Impostazioni: tocca il nuovo calendario e attiva «Sincronizza». Per i promemoria imposta «Notifiche predefinite».",
              "Per togliere appuntamenti o cambiare classi torna qui e modifica: il calendario si aggiorna da solo (su Google può servire fino a un giorno)."];
-      alt="Se il calendario non compare: tocca «Copia l'indirizzo del calendario». Apri Chrome, vai su calendar.google.com e dal menu ⋮ attiva «Sito desktop». Accanto ad «Altri calendari» tocca +, poi «Da URL», incolla l'indirizzo e tocca «Aggiungi calendario». Dopo qualche minuto compare nell'app: attiva «Sincronizza» nelle sue impostazioni.";
+      alt="Se al punto 1 non vedi il campo per l'indirizzo, dal menu ⋮ di Chrome attiva «Sito desktop» e ricarica la pagina. L'indirizzo resta copiato; puoi anche ricopiarlo con «Copia l'indirizzo del calendario».";
     }else if(iOS){
       steps=["Tocca «Iscriviti al calendario», poi «Iscriviti».",
              "Scegli l'account iCloud. Se vuoi i promemoria, disattiva «Rimuovi avvisi». Tocca «Aggiungi».",
