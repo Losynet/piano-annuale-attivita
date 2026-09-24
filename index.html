@@ -100,6 +100,7 @@ select{font:inherit;padding:6px 10px;border-radius:10px;border:1.5px solid var(-
 .btn2{appearance:none;border:1.5px solid var(--viola);color:var(--viola);background:transparent;font-weight:700;padding:10px 14px;border-radius:12px;cursor:pointer;font-size:.95rem}
 .btn2.solid{background:var(--viola);color:var(--on)}
 .btn2:disabled{opacity:.35;cursor:not-allowed}
+html.abbonamento.dev-ios .gcal{display:none}
 a.btn,a.btn2{display:inline-block;text-decoration:none;text-align:center;-webkit-tap-highlight-color:transparent}
 a[aria-disabled="true"]{opacity:.35;pointer-events:none}
 .small{font-size:.85rem;color:var(--ink2);margin:10px 0 0}
@@ -408,6 +409,12 @@ function selOf(ind,cls){
 /* ---------- UI ---------- */
 function init(){
   const KEY="impegni-2026-27-v2";
+  // Dispositivo: decide quali pulsanti e passaggi mostrare
+  const UA0=navigator.userAgent;
+  const DEV=(/iPhone|iPad|iPod/.test(UA0)||(/Macintosh/.test(UA0)&&navigator.maxTouchPoints>1))?"ios":/Android/.test(UA0)?"android":"pc";
+  const DEVNOME={ios:"iPhone",android:"Android",pc:"computer"}[DEV];
+  document.documentElement.classList.add("dev-"+DEV);
+  if(WORKER)document.documentElement.classList.add("abbonamento");
   let st={ind:[],cls:[],hidden:[],opts:{coll:true,fam:true,glo:true,cal:false,past:false,alarm:"60"}};
   try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s&&Array.isArray(s.ind)&&Array.isArray(s.cls))st={ind:s.ind,cls:s.cls,hidden:Array.isArray(s.hidden)?s.hidden:[],opts:{...st.opts,...(s.opts||{})}};}catch(_){}
   // Scelte passate dall'app sulla schermata Home (vedi apriInSafari)
@@ -518,7 +525,7 @@ function init(){
       clashes?el("small",{text:clashes===1?"1 sovrapposizione":clashes+" sovrapposizioni"}):null].filter(Boolean));
     for(const id of ["dl2","print","copyUrl"])$(id).disabled=!n;
     for(const id of ["dl","add"])$(id).setAttribute("aria-disabled",String(!n));
-    $("howHint").textContent=n?(daHome?"Le tue scelte sono arrivate dall'icona: ora tocca «Aggiungi al calendario».":"Segui questi passaggi: bastano pochi secondi."):"Scegli prima un indirizzo e le classi.";
+    $("howHint").textContent=n?(daHome?"Le tue scelte sono arrivate dall'icona: ora tocca «Aggiungi al calendario».":"Passaggi per "+DEVNOME+": bastano pochi secondi."):"Scegli prima un indirizzo e le classi.";
     if(window.__syncIcs)window.__syncIcs();
   }
   function renderAll(){save();renderIst();renderCls();renderList();}
@@ -554,7 +561,7 @@ function init(){
   }
   if(WORKER&&!iOS&&!android){const g=el("a",{id:"gsub",href:"#",target:"_blank",text:"Iscriviti con Google Calendar"});$("howAlt").after(g);
     g.addEventListener("click",()=>{g.href=subLinks().google;});}
-  if(WORKER){const cb=$("copyUrl");cb.hidden=false;
+  if(WORKER){const cb=$("copyUrl");cb.hidden=(DEV==="ios"); // su iPhone non serve
     cb.addEventListener("click",()=>{
       if(!current.length)return;
       try{localStorage.setItem(SKEY,"1");}catch(_){}
@@ -661,7 +668,7 @@ function init(){
              "Per togliere appuntamenti o cambiare classi torna qui e modifica: il calendario si aggiorna da solo (su Google può servire fino a un giorno)."];
       alt="Se al punto 1 non vedi il campo per l'indirizzo, dal menu ⋮ di Chrome attiva «Sito desktop» e ricarica la pagina. L'indirizzo resta copiato; puoi anche ricopiarlo con «Copia l'indirizzo del calendario».";
     }else if(iOS){
-      steps=["Tocca «Iscriviti al calendario», poi «Iscriviti».",
+      steps=["Tocca «Iscriviti al calendario»: si apre il Calendario con l'indirizzo già inserito. Tocca «Trova».",
              "Scegli l'account iCloud. Se vuoi i promemoria, disattiva «Rimuovi avvisi». Tocca «Aggiungi».",
              "Per togliere appuntamenti o cambiare classi torna qui e modifica: il calendario si aggiorna da solo, senza reiscriverti."];
       alt="In alternativa, «Scarica il file» aggiunge gli appuntamenti una sola volta, senza aggiornamenti.";
@@ -698,7 +705,7 @@ function init(){
   }
   $("steps").replaceChildren(...steps.map(t=>el("li",{text:t})));
   $("howAlt").textContent=alt;
-  if(iOS&&inApp)$("iosnote").hidden=false;
+  if(iOS&&inApp&&!WORKER)$("iosnote").hidden=false; // con l'abbonamento funziona anche fuori da Safari
   $("add").addEventListener("click",add);
   $("dl").addEventListener("click",add);
   $("dl2").addEventListener("click",()=>{if(!current.length)return;try{if(iOS&&standalone)shareFile();else download();}catch(e){showErr(e.message);}});
