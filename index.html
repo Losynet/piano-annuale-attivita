@@ -602,7 +602,7 @@ function init(){
     let bin="";for(const b of bytes)bin+=String.fromCharCode(b);
     const https=W0+"/c/"+token()+".ics?s="+btoa(bin).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
     const webcal=https.replace(/^https:/,"webcal:");
-    return {https,webcal,google:"https://calendar.google.com/calendar/r?cid="+encodeURIComponent(webcal)};
+    return {https,webcal,google:"https://calendar.google.com/calendar/r?cid="+encodeURIComponent(https)};
   }
   function add(ev){
     if(!current.length){ev.preventDefault();return;}
