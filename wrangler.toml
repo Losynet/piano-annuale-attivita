@@ -1,0 +1,12 @@
+# Configurazione del Worker di Cloudflare per «I miei impegni 2026/27».
+# Cloudflare legge questo file dal repository GitHub e pubblica worker.js da solo.
+name = "impegni"
+main = "worker.js"
+compatibility_date = "2026-09-01"
+workers_dev = true
+
+# Archivio delle scelte dei colleghi (classi, appuntamenti tolti, promemoria).
+# ID del namespace KV «impegni-stati».
+[[kv_namespaces]]
+binding = "STATI"
+id = "3a551316c4e94507b590b248e989acaf"
