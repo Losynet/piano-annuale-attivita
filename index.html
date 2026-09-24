@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>I miei impegni 2026/27 – Pisticci e Marconia</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📅</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3F5F6;--card:#FFFFFF;--ink:#1B2430;--ink2:#566273;--line:#DCE1E6;--on:#FFFFFF;
+  --viola:#8A3D85;--ocra:#B97C10;--mare:#127F7B;--glo:#4E6A8A;--cal:#7D8794;
+  --mare-t:#E1F3F2;--warn:#B3261E;--warn-t:#FCE9E7;
+  --head:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible","Segoe UI",system-ui,-apple-system,sans-serif;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#11161D;--card:#1A212B;--ink:#E9EEF3;--ink2:#A3AEBB;--line:#2E3845;--on:#0E1A1A;
+  --viola:#CF96CA;--ocra:#E8B04A;--mare:#45C4BE;--glo:#93AECD;--cal:#8C96A3;
+  --mare-t:#15302F;--warn:#FF9A90;--warn-t:#3A1F1D;}}
+:root[data-theme="dark"]{
+  --bg:#11161D;--card:#1A212B;--ink:#E9EEF3;--ink2:#A3AEBB;--line:#2E3845;--on:#0E1A1A;
+  --viola:#CF96CA;--ocra:#E8B04A;--mare:#45C4BE;--glo:#93AECD;--cal:#8C96A3;
+  --mare-t:#15302F;--warn:#FF9A90;--warn-t:#3A1F1D;}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 var(--body);-webkit-text-size-adjust:100%}
+.wrap{max-width:760px;margin:0 auto;padding:32px 18px 140px}
+.brand{display:flex;margin-bottom:20px}
+.brand i{width:20px;height:20px;border-radius:50%;margin-right:-6px;opacity:.92}
+h1{font:800 clamp(2.3rem,9vw,3.5rem)/1 var(--head);letter-spacing:-.03em;margin:0 0 14px}
+.lead{color:var(--ink2);max-width:58ch;margin:0}
+section{margin-top:38px}
+h2{font:800 1.4rem/1.2 var(--head);letter-spacing:-.015em;margin:0 0 4px}
+.hint{color:var(--ink2);margin:0 0 14px;font-size:.95rem}
+button{font:inherit;color:inherit}
+.ist-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.ist{appearance:none;text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;cursor:pointer;min-height:66px}
+.ist b{display:block;font:600 1.05rem/1.2 var(--head)}
+.ist span{font-size:.85rem;color:var(--ink2)}
+.ist[aria-pressed="true"]{border-color:var(--mare);background:var(--mare-t);box-shadow:inset 0 0 0 1px var(--mare)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:12px}
+.panel-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.panel-h h3{font:600 1.1rem/1.2 var(--head);margin:0}
+.panel-h h3 small{font:400 .85rem var(--body);color:var(--ink2);margin-left:6px}
+.linkbtn{background:none;border:0;color:var(--mare);font-size:.9rem;cursor:pointer;padding:4px 6px;text-decoration:underline;text-underline-offset:3px}
+.row{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-top:1px solid var(--line)}
+.anno{width:2.4rem;flex:none;font:600 .95rem var(--head);color:var(--ink2);padding-top:6px}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pill{appearance:none;border:1.5px solid var(--line);background:transparent;border-radius:999px;padding:5px 12px;font-size:.95rem;cursor:pointer;min-height:36px}
+.pill[aria-pressed="true"]{background:var(--mare);border-color:var(--mare);color:var(--on);font-weight:700}
+.nocls{font-size:.88rem;color:var(--ink2);margin:6px 0 0}
+.opts{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:4px 16px}
+.opts label{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line);cursor:pointer}
+.opts label:first-child{border-top:0}
+.opts small{display:block;color:var(--ink2);font-size:.85rem}
+input[type=checkbox]{width:20px;height:20px;accent-color:var(--mare);margin-top:3px;flex:none}
+select{font:inherit;padding:6px 10px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:inherit;margin-top:6px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.85rem;color:var(--ink2);margin:0 0 6px}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--c);margin-right:6px}
+.month{font:800 1.15rem var(--head);letter-spacing:-.01em;margin:28px 0 10px}
+.ev{display:flex;gap:14px;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--c);border-radius:12px;padding:12px 14px;margin-bottom:8px}
+.leaf{flex:none;width:42px;text-align:center}
+.leaf small{display:block;font-size:.8rem;color:var(--ink2)}
+.leaf strong{display:block;font:800 1.65rem/1 var(--head)}
+.ev-b{min-width:0;flex:1}
+.ev h4{margin:0;font:700 1rem/1.35 var(--body)}
+.meta{font-size:.9rem;color:var(--ink2)}
+.meta b{color:var(--c)}
+.note{font-size:.85rem;color:var(--ink2);margin-top:4px}
+.clash{margin-top:6px;font-size:.85rem;color:var(--warn);background:var(--warn-t);padding:4px 8px;border-radius:8px}
+.gcal{font-size:.85rem;color:var(--mare);display:inline-block;margin-top:4px}
+.ev-acts{display:flex;flex-wrap:wrap;gap:4px 16px;align-items:center}
+.rm{background:none;border:0;padding:4px 0;margin-top:4px;font-size:.85rem;color:var(--ink2);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.tolti{margin-top:22px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px 14px}
+.tolti summary{cursor:pointer;padding:10px 0;font:600 1rem var(--head)}
+.tolti p{font-size:.85rem;color:var(--ink2);margin:0 0 8px}
+.trow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:.93rem}
+.empty{background:var(--card);border:1.5px dashed var(--line);border-radius:14px;padding:22px;color:var(--ink2)}
+.alert{background:var(--warn-t);color:var(--warn);border-radius:12px;padding:10px 14px;font-size:.95rem;margin-bottom:10px}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding:12px 18px calc(12px + env(safe-area-inset-bottom,0px));z-index:5}
+.bar-in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:12px;justify-content:space-between}
+.count{font:600 1rem/1.25 var(--head)}
+.count small{display:block;font:400 .82rem var(--body);color:var(--ink2)}
+.btn{appearance:none;border:0;background:var(--viola);color:var(--on);font-weight:700;padding:12px 18px;border-radius:12px;cursor:pointer;flex:none}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+:focus-visible{outline:3px solid var(--ocra);outline-offset:2px}
+footer{margin-top:44px;font-size:.9rem;color:var(--ink2)}
+footer h2{font-size:1.1rem;color:var(--ink)}
+footer p{margin:0 0 10px;max-width:62ch}
+@media (prefers-reduced-motion:no-preference){.ev{animation:in .25s ease both}@keyframes in{from{opacity:0}to{opacity:1}}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand" aria-hidden="true"><i style="background:#8A3D85"></i><i style="background:#E0A93B"></i><i style="background:#2BA6A0"></i></div>
+    <h1>I miei impegni<br>2026/27</h1>
+    <p class="lead">Dal Piano annuale delle attività dell'I.I.S. «Pisticci – Montalbano Jonico», per le scuole di Pisticci e Marconia. Scegli gli indirizzi e le classi in cui insegni: l'app raccoglie consigli, scrutini, collegi e incontri che ti riguardano e li prepara per il calendario del telefono.</p>
+  </header>
+
+  <section>
+    <h2>Dove insegni</h2>
+    <p class="hint">Puoi scegliere più indirizzi.</p>
+    <div class="ist-grid" id="istGrid"></div>
+  </section>
+
+  <section>
+    <h2>Le tue classi</h2>
+    <p class="hint" id="clsHint">Prima scegli almeno un indirizzo.</p>
+    <div id="clsPanels"></div>
+  </section>
+
+  <section>
+    <h2>Cosa aggiungere</h2>
+    <div class="opts">
+      <label><input type="checkbox" id="o-coll" checked><span>Collegi, dipartimenti ed elezioni<small>Impegni comuni a tutti i docenti della sede</small></span></label>
+      <label><input type="checkbox" id="o-fam" checked><span>Incontri con le famiglie</span></label>
+      <label><input type="checkbox" id="o-glo" checked><span>GLO della sede<small>Utile per il sostegno e per chi ha alunni con PEI</small></span></label>
+      <label><input type="checkbox" id="o-cal"><span>Calendario scolastico<small>Inizio e fine delle lezioni, vacanze, sospensioni</small></span></label>
+      <label><input type="checkbox" id="o-past"><span>Anche gli appuntamenti già passati</span></label>
+      <label style="cursor:default"><span style="margin-left:32px">Promemoria sul telefono<br>
+        <select id="o-alarm"><option value="60">1 ora prima</option><option value="1440">1 giorno prima</option><option value="both">1 giorno e 1 ora prima</option><option value="0">Nessun promemoria</option></select></span></label>
+    </div>
+  </section>
+
+  <section>
+    <h2>I tuoi appuntamenti</h2>
+    <div class="legend">
+      <span style="--c:var(--mare)">Consigli e scrutini</span><span style="--c:var(--viola)">Collegiali</span><span style="--c:var(--ocra)">Famiglie</span><span style="--c:var(--glo)">GLO</span><span style="--c:var(--cal)">Calendario</span>
+    </div>
+    <div id="list"></div>
+  </section>
+
+  <footer>
+    <h2>Come aggiungerli al calendario</h2>
+    <p><b>iPhone:</b> tocca «Scarica per il calendario», apri il file e scegli «Aggiungi tutti».</p>
+    <p><b>Android:</b> il modo più sicuro è Google Calendar dal computer: calendar.google.com, Impostazioni, Importa ed esporta, scegli il file. Gli eventi compaiono poi anche sul telefono. In alternativa, ogni appuntamento ha il suo link «Aggiungi a Google Calendar».</p>
+    <p>Se il piano cambia, puoi riscaricare il file: gli appuntamenti già importati vengono aggiornati invece che duplicati sulla maggior parte dei calendari.</p>
+    <p>Le date riproducono il Piano annuale delle attività 2026/27, che può subire variazioni. In caso di dubbio fanno fede le comunicazioni ufficiali della scuola. Le durate di collegi e dipartimenti sono indicative.</p>
+  </footer>
+</div>
+
+<div class="bar"><div class="bar-in">
+  <div class="count" id="count" aria-live="polite">Nessun appuntamento</div>
+  <button class="btn" id="dl" disabled>Scarica per il calendario</button>
+</div></div>
+
+<script>
+"use strict";
+const IST={
+  IPS:{nome:"IPSEOA",sede:"Alberghiero, Marconia",loc:"IPSEOA, Via Nazionale, Marconia di Pisticci (MT)",
+       classi:["I A","I B","I C","II A","II B","III A Eno","III B Eno","III A AT","IV A Eno","IV A Sala","V A Eno","V A AT","III AE Serale","V AE Serale"]},
+  ITA:{nome:"ITAA",sede:"Agrario, Marconia",loc:"ITAA, Marconia di Pisticci (MT)",
+       classi:["I A","II A","II B","III B PT","IV A GAT","IV B PT","V A GAT","V B PT","V Serale"]},
+  ITT:{nome:"ITT",sede:"Tecnologico, Pisticci",loc:"ITT, Pisticci (MT)",
+       classi:["I A","II A","II B","III A Inf","III A Tel","IV A Inf","V A Inf"]},
+  CLA:{nome:"Liceo Classico",sede:"Pisticci",loc:"Liceo Classico, Pisticci (MT)",
+       classi:["I A","II A","III A","IV A","V A"]}
+};
+const ORD=["IPS","ITA","ITT","CLA"];
+/* Indirizzi di studio: ciò che il collega sceglie. "sede" collega l'indirizzo agli impegni del piano. */
+const IND=[
+  {id:"CLA",nome:"Liceo Classico",breve:"Liceo Classico",sede:"CLA",luogo:"Pisticci",classi:["I A","II A","III A","IV A","V A"]},
+  {id:"ITA",nome:"Istituto Tecnico Agrario",breve:"Tecnico Agrario",sede:"ITA",luogo:"Marconia",classi:["I A","II A","II B","III B PT","IV A GAT","IV B PT","V A GAT","V B PT","V Serale"]},
+  {id:"IPS",nome:"Istituto Professionale per i Servizi dell'Enogastronomia e l'Ospitalità Alberghiera",breve:"IPSEOA",sede:"IPS",luogo:"Marconia",classi:["I A","I B","I C","II A","II B","III A Eno","III B Eno","III A AT","IV A Eno","IV A Sala","V A Eno","V A AT","III AE Serale","V AE Serale"]},
+  {id:"ITT",nome:"Istituto Tecnico per l'Informatica e le Telecomunicazioni",breve:"ITT Informatica e Telecomunicazioni",sede:"ITT",luogo:"Pisticci",classi:["I A","II A","II B","III A Inf","III A Tel","IV A Inf","V A Inf"]}
+];
+const ALL=ORD, MP=["IPS","ITA","ITT","CLA"];
+const K={cdc:"Consiglio di classe",scr:"Scrutinio del trimestre",d15:"Consiglio di classe, Documento del 15 maggio",fin:"Scrutinio finale"};
+
+const A1="III AE Serale@14.20|V AE Serale@14.40|I A@15.00|I B@15.45|I C@16.30|II A@17.15|II B@18.00";
+const A2="III A Eno@14.30|III B Eno@15.15|III A AT@16.00|IV A Eno@16.45|V A Eno@17.15|V A AT@18.00|IV A Sala@18.45";
+const B1="V Serale@14.40|I A@15.00|II A@15.45|II B@16.30";
+const B2="IV A GAT@15.00|V A GAT@15.45|III B PT@16.00|IV B PT@16.45|V B PT@17.15";
+const C0="I A@14.30|II A@15.15|II B@16.00|III A Inf@16.45|III A Tel@17.30|IV A Inf@18.15|V A Inf@19.00";
+const D0="I A@15.00|II A@15.45|III A@16.30|IV A@17.15|V A@18.00";
+
+const BLOCKS=[
+  ["IPS","cdc",["2026-10-06","2026-11-16","2027-03-12","2027-05-21"],A1],
+  ["IPS","cdc",["2026-10-07","2026-11-17","2027-03-15","2027-05-24"],A2],
+  ["IPS","scr",["2027-01-11"],A1],["IPS","scr",["2027-01-12"],A2],
+  ["IPS","d15",["2027-05-07"],"V AE Serale@15.00|V A Eno@16.00|V A AT@17.00"],
+  ["IPS","fin",["2027-06-08"],"V AE Serale@14.30|V A Eno@15.15|V A AT@16.00"],
+  ["IPS","cdc",["2027-06-11"],"III AE Serale@17.00|I A@17.45|I B@18.30|I C@19.15"],
+  ["IPS","cdc",["2027-06-14"],"II A@08.00|II B@08.45|III A Eno@09.30|III B Eno@10.15|III A AT@11.00|IV A Eno@11.45|IV A Sala@12.30"],
+  ["ITA","cdc",["2026-10-02","2026-11-11","2027-03-09","2027-05-18"],B1],
+  ["ITA","cdc",["2026-10-05","2026-11-12","2027-03-10","2027-05-19"],B2],
+  ["ITA","scr",["2027-01-13"],"V Serale@14.40|I A@15.00|II A@15.45|II B@16.30|IV A GAT@16.45|V A GAT@17.15|III B PT@18.00|IV B PT@18.45|V B PT@19.15"],
+  ["ITA","d15",["2027-05-06"],"V Serale@15.00|V A GAT@16.00|V B PT@17.00"],
+  ["ITA","fin",["2027-06-08"],"V A GAT@16.45|V B PT@17.30|V Serale@18.15"],
+  ["ITA","cdc",["2027-06-11"],"IV A GAT@08.00|III B PT@08.45|IV B PT@09.30|I A@10.15|II A@11.00|II B@11.45"],
+  ["ITT","cdc",["2026-10-01","2026-11-13","2027-03-11","2027-05-20"],C0],
+  ["ITT","scr",["2027-01-14"],C0],
+  ["ITT","d15",["2027-05-05"],"V A Inf@16.00"],
+  ["ITT","fin",["2027-06-08"],"V A Inf@19.00"],
+  ["ITT","cdc",["2027-06-11"],"I A@12.30|II A@13.15|II B@14.00|III A Inf@14.45|III A Tel@15.30|IV A Inf@16.15"],
+  ["CLA","cdc",["2026-10-08","2026-11-18","2027-03-08","2027-05-17"],D0],
+  ["CLA","scr",["2027-01-15"],"I A@15.00|II A@15.30|III A@16.00|IV A@16.30|V A@17.00"],
+  ["CLA","d15",["2027-05-04"],"V A@15.00"],
+  ["CLA","fin",["2027-06-08"],"V A@19.45"],
+  ["CLA","cdc",["2027-06-14"],"I A@13.15|II A@14.00|III A@14.45|IV A@15.30"],
+];
+
+const DUR="Durata indicativa: il piano indica solo l'ora di inizio.";
+const IIS="I.I.S. Pisticci – Montalbano Jonico (sede da confermare)";
+const GLOC="c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)";
+const GEN=[
+  {d:"2026-09-01",s:"10:00",dur:120,cat:"coll",t:"Collegio dei docenti",ist:ALL,loc:IIS,note:DUR},
+  {d:"2026-09-10",s:"09:00",dur:120,cat:"coll",t:"Collegio dei docenti",ist:ALL,loc:IIS,note:DUR},
+  {d:"2026-10-23",s:"17:00",dur:120,cat:"coll",t:"Collegio dei docenti",ist:ALL,loc:IIS,note:DUR},
+  {d:"2027-05-27",s:"17:00",dur:120,cat:"coll",t:"Collegio dei docenti",ist:ALL,loc:IIS,note:DUR},
+  {d:"2027-06-14",s:"17:00",dur:120,cat:"coll",t:"Collegio dei docenti",ist:ALL,loc:IIS,note:DUR},
+  {d:"2026-10-27",s:"08:00",dur:120,cat:"coll",t:"Elezioni degli organi collegiali, componente alunni",ist:ALL,note:"A partire dalle 8.00."},
+  {d:"2026-10-27",s:"16:00",dur:120,cat:"coll",t:"Elezioni degli organi collegiali, componente genitori",ist:ALL,note:"A partire dalle 16.00."},
+  {d:"2027-02-24",s:"16:00",dur:120,cat:"coll",t:"Dipartimenti per indirizzo",ist:MP,loc:IIS,note:DUR},
+  {d:"2027-05-03",all:true,cat:"coll",t:"Dipartimenti per aree disciplinari",ist:ALL,loc:"Sede centrale IPSEOA, Marconia di Pisticci (MT)",note:"Tutti gli indirizzi. Orario da concordare."},
+  {d:"2026-12-01",s:"16:30",e:"19:30",cat:"fam",t:"1° incontro con le famiglie, Liceo Classico e ITT",ist:["CLA","ITT"],loc:"Pisticci (MT)"},
+  {d:"2026-12-02",s:"16:30",e:"19:30",cat:"fam",t:"1° incontro con le famiglie, IPSEOA",ist:["IPS"]},
+  {d:"2026-12-03",s:"16:30",e:"19:30",cat:"fam",t:"1° incontro con le famiglie, ITAA",ist:["ITA"]},
+  {d:"2027-04-26",s:"16:30",e:"19:30",cat:"fam",t:"2° incontro con le famiglie, Liceo Classico e ITT",ist:["CLA","ITT"],loc:"Pisticci (MT)"},
+  {d:"2027-04-27",s:"16:30",e:"19:30",cat:"fam",t:"2° incontro con le famiglie, IPSEOA",ist:["IPS"]},
+  {d:"2027-04-28",s:"16:30",e:"19:30",cat:"fam",t:"2° incontro con le famiglie, ITAA",ist:["ITA"]},
+  {d:"2027-04-30",s:"16:30",e:"19:30",cat:"fam",t:"2° incontro con le famiglie, triennio di tutti gli indirizzi",ist:ALL,loc:IIS,tri:true},
+  {d:"2026-10-27",all:true,cat:"glo",t:"GLO c/o IPSEOA Marconia",ist:MP,loc:GLOC,note:"Orari da definire."},
+  {d:"2026-10-28",all:true,cat:"glo",t:"GLO c/o IPSEOA Marconia",ist:MP,loc:GLOC,note:"Orari da definire."},
+  {d:"2026-10-29",all:true,cat:"glo",t:"GLO c/o IPSEOA Marconia",ist:MP,loc:GLOC,note:"Orari da definire."},
+  {d:"2026-11-05",all:true,cat:"glo",t:"GLO c/o IPSEOA Marconia",ist:MP,loc:GLOC,note:"Orari da definire."},
+  {d:"2026-11-10",all:true,cat:"glo",t:"GLO c/o IPSEOA Marconia",ist:MP,loc:GLOC,note:"Orari da definire."},
+  {d:"2026-11-12",all:true,cat:"glo",t:"GLO c/o IPSEOA Marconia",ist:MP,loc:GLOC,note:"Orari da definire."},
+  {d:"2026-09-14",all:true,cat:"cal",t:"Inizio delle lezioni",ist:["IPS","ITA","ITT"]},
+  {d:"2026-09-16",all:true,cat:"cal",t:"Inizio delle lezioni",ist:["CLA"]},
+  {d:"2026-11-02",all:true,cat:"cal",t:"Lezioni sospese",ist:ALL},
+  {d:"2026-12-07",to:"2026-12-08",all:true,cat:"cal",t:"Lezioni sospese",ist:ALL},
+  {d:"2026-12-22",all:true,cat:"cal",t:"Fine del trimestre",ist:ALL},
+  {d:"2026-12-23",to:"2027-01-06",all:true,cat:"cal",t:"Vacanze di Natale",ist:ALL},
+  {d:"2027-02-08",to:"2027-02-09",all:true,cat:"cal",t:"Lezioni sospese",ist:ALL},
+  {d:"2027-03-25",to:"2027-03-30",all:true,cat:"cal",t:"Vacanze di Pasqua",ist:ALL},
+  {d:"2027-06-02",all:true,cat:"cal",t:"Festa della Repubblica, lezioni sospese",ist:ALL},
+  {d:"2027-06-08",all:true,cat:"cal",t:"Termine delle lezioni",ist:ALL}
+];
+
+/* ---------- helpers ---------- */
+const pad=n=>String(n).padStart(2,"0");
+const hm=s=>{const [h,m]=s.split(/[.:]/).map(Number);return h*60+m;};
+const fromMin=n=>pad(Math.floor(n/60))+":"+pad(n%60);
+const parseD=s=>{const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d);};
+const ymd=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const addDays=(s,n)=>{const d=parseD(s);d.setDate(d.getDate()+n);return ymd(d);};
+const annoOf=c=>({I:1,II:2,III:3,IV:4,V:5})[c.split(" ")[0]]||0;
+const GG=["dom","lun","mar","mer","gio","ven","sab"];
+const MESI=["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"];
+
+function expandClasses(){
+  const out=[];
+  for(const [ist,kind,dates,str] of BLOCKS){
+    const slot=kind==="d15"?60:45;
+    const items=str.split("|").map(x=>{let [c,t]=x.split("@");let i=ist;
+      if(c.includes(":")){[i,c]=c.split(":");}return {ist:i,cls:c.trim(),m:hm(t)};});
+    const times=[...new Set(items.map(x=>x.m))].sort((a,b)=>a-b);
+    for(const d of dates) for(const it of items){
+      const nx=times.find(t=>t>it.m);const dur=nx?Math.min(slot,nx-it.m):slot;
+      out.push({d,s:fromMin(it.m),e:fromMin(it.m+dur),cat:"classe",ist:[it.ist],cls:it.cls,
+        t:K[kind]+" "+it.cls,place:IST[it.ist].nome,loc:IST[it.ist].loc});
+    }
+  }
+  return out;
+}
+const CLASS_EV=expandClasses();
+
+function compute(st,today){
+  const sel=st.sel, o=st.opts, has=i=>Object.prototype.hasOwnProperty.call(sel,i);
+  const tri=Object.keys(sel).some(i=>sel[i].some(c=>annoOf(c)>=3));
+  const res=[];
+  for(const ev of CLASS_EV) if(has(ev.ist[0])&&sel[ev.ist[0]].includes(ev.cls)) res.push({...ev});
+  for(const g of GEN){
+    if(!g.ist.some(has)) continue;
+    if((g.cat==="coll"&&!o.coll)||(g.cat==="fam"&&!o.fam)||(g.cat==="glo"&&!o.glo)||(g.cat==="cal"&&!o.cal)) continue;
+    if(g.tri&&!tri) continue;
+    const ev={...g};
+    if(!ev.all&&!ev.e) ev.e=fromMin(hm(ev.s)+ev.dur);
+    if(!ev.loc) ev.loc=g.ist.length===1?IST[g.ist[0]].loc:IIS;
+    ev.place=g.ist.length===ALL.length?"Tutto l'istituto":g.ist.filter(has).map(i=>IST[i].nome).join(", ");
+    res.push(ev);
+  }
+  const vis=res.filter(e=>o.past||(e.to||e.d)>=today);
+  vis.sort((a,b)=>(a.d+(a.all?"00:00":a.s)).localeCompare(b.d+(b.all?"00:00":b.s)));
+  const hid=new Set(st.hidden||[]),hidden=[];
+  for(const e of vis)e.id=hash(e.d+"|"+(e.s||"")+"|"+e.t+"|"+(e.cls||"")+"|"+e.ist.join(","));
+  const shown=vis.filter(e=>{if(hid.has(e.id)){hidden.push(e);return false;}return true;});
+  let clashes=0;
+  const timed=shown.filter(e=>!e.all);
+  for(let i=0;i<timed.length;i++)for(let j=i+1;j<timed.length;j++){
+    const a=timed[i],b=timed[j]; if(a.d!==b.d) continue;
+    if(hm(a.s)<hm(b.e)&&hm(b.s)<hm(a.e)){
+      (a.clash=a.clash||[]).push(b.t+" ("+b.place+")");
+      (b.clash=b.clash||[]).push(a.t+" ("+a.place+")"); clashes++;
+    }
+  }
+  return {list:shown,clashes,hidden};
+}
+
+/* ---------- ICS ---------- */
+function esc(s){return String(s).replace(/\\/g,"\\\\").replace(/;/g,"\\;").replace(/,/g,"\\,").replace(/\r?\n/g,"\\n");}
+function fold(line){
+  const enc=new TextEncoder(); if(enc.encode(line).length<=75) return line;
+  const out=[];let cur="",len=0;
+  for(const ch of line){const b=enc.encode(ch).length;const max=out.length?74:75;
+    if(len+b>max){out.push(cur);cur="";len=0;} cur+=ch;len+=b;}
+  out.push(cur);return out.join("\r\n ");
+}
+function hash(s){let x=5381;for(const c of s)x=((x<<5)+x+c.codePointAt(0))>>>0;return x.toString(36);}
+function buildICS(list,alarm){
+  const now=new Date(),st=now.getUTCFullYear()+pad(now.getUTCMonth()+1)+pad(now.getUTCDate())+"T"+pad(now.getUTCHours())+pad(now.getUTCMinutes())+pad(now.getUTCSeconds())+"Z";
+  const L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Gianni Losenno per la scuola//Impegni 2026-27//IT","CALSCALE:GREGORIAN","METHOD:PUBLISH",
+    "X-WR-CALNAME:Impegni scuola 2026/27","X-WR-TIMEZONE:Europe/Rome",
+    "BEGIN:VTIMEZONE","TZID:Europe/Rome",
+    "BEGIN:DAYLIGHT","TZOFFSETFROM:+0100","TZOFFSETTO:+0200","TZNAME:CEST","DTSTART:19700329T020000","RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU","END:DAYLIGHT",
+    "BEGIN:STANDARD","TZOFFSETFROM:+0200","TZOFFSETTO:+0100","TZNAME:CET","DTSTART:19701025T030000","RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU","END:STANDARD",
+    "END:VTIMEZONE"];
+  const alarmBlock=trig=>["BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:Promemoria","TRIGGER:"+trig,"END:VALARM"];
+  for(const e of list){
+    const summary=e.cat==="classe"?e.t+", "+e.place:e.t;
+    const desc=[e.note,e.clash?"Attenzione: si sovrappone a "+e.clash.join("; "):"","Fonte: Piano annuale delle attività 2026/27, I.I.S. Pisticci-Montalbano"].filter(Boolean).join("\n");
+    L.push("BEGIN:VEVENT","UID:"+hash(e.d+(e.s||"")+summary)+"-"+e.d.replace(/-/g,"")+"@impegni-2026-27","DTSTAMP:"+st,
+      "SUMMARY:"+esc(summary),"DESCRIPTION:"+esc(desc));
+    if(e.loc) L.push("LOCATION:"+esc(e.loc));
+    if(e.all){
+      L.push("DTSTART;VALUE=DATE:"+e.d.replace(/-/g,""),"DTEND;VALUE=DATE:"+addDays(e.to||e.d,1).replace(/-/g,""),"TRANSP:TRANSPARENT");
+      if(alarm!=="0"&&e.cat!=="cal") L.push(...alarmBlock("-PT15H"));
+    }else{
+      const d=e.d.replace(/-/g,"");
+      L.push("DTSTART;TZID=Europe/Rome:"+d+"T"+e.s.replace(":","")+"00","DTEND;TZID=Europe/Rome:"+d+"T"+e.e.replace(":","")+"00");
+      if(alarm==="60"||alarm==="both") L.push(...alarmBlock("-PT1H"));
+      if(alarm==="1440"||alarm==="both") L.push(...alarmBlock("-P1D"));
+    }
+    L.push("END:VEVENT");
+  }
+  L.push("END:VCALENDAR");
+  return L.map(fold).join("\r\n")+"\r\n";
+}
+function gcal(e){
+  const p=new URLSearchParams({action:"TEMPLATE",text:e.cat==="classe"?e.t+", "+e.place:e.t,
+    details:(e.note?e.note+"\n":"")+"Piano annuale delle attività 2026/27",location:e.loc||"",ctz:"Europe/Rome"});
+  const d0=e.d.replace(/-/g,"");
+  p.set("dates",e.all?d0+"/"+addDays(e.to||e.d,1).replace(/-/g,""):d0+"T"+e.s.replace(":","")+"00/"+d0+"T"+e.e.replace(":","")+"00");
+  return "https://calendar.google.com/calendar/render?"+p.toString();
+}
+
+/* ---------- UI ---------- */
+function init(){
+  const KEY="impegni-2026-27-v2";
+  let st={ind:[],cls:[],hidden:[],opts:{coll:true,fam:true,glo:true,cal:false,past:false,alarm:"60"}};
+  try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s&&Array.isArray(s.ind)&&Array.isArray(s.cls))st={ind:s.ind,cls:s.cls,hidden:Array.isArray(s.hidden)?s.hidden:[],opts:{...st.opts,...(s.opts||{})}};}catch(_){}
+  const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st));}catch(_){}};
+  const $=id=>document.getElementById(id);
+  const el=(tag,attrs={},...kids)=>{const n=document.createElement(tag);
+    for(const [k,v] of Object.entries(attrs)){if(k==="on")n.addEventListener("click",v);else if(k==="text")n.textContent=v;else n.setAttribute(k,v);}
+    for(const k of kids)if(k!=null)n.append(k);return n;};
+  const todayISO=ymd(new Date());
+  const cid=(I,c)=>I.sede+"|"+c;
+  const chosen=()=>IND.filter(I=>st.ind.includes(I.id));
+  const label=(sede,c)=>IND.filter(I=>I.sede===sede&&I.classi.includes(c)).map(I=>I.breve).join(" / ");
+  let current=[];
+
+  function selForCompute(){
+    const sel={},ch=chosen();
+    for(const I of ch){if(!sel[I.sede])sel[I.sede]=[];
+      for(const c of I.classi)if(st.cls.includes(cid(I,c))&&!sel[I.sede].includes(c))sel[I.sede].push(c);}
+    return sel;
+  }
+  function prune(){const ch=chosen();st.cls=st.cls.filter(k=>ch.some(I=>I.classi.some(c=>cid(I,c)===k)));}
+
+  function renderIst(){
+    const g=$("istGrid");g.replaceChildren();
+    for(const I of IND){
+      const on=st.ind.includes(I.id);
+      g.append(el("button",{class:"ist","aria-pressed":String(on),on:()=>{
+          if(on)st.ind=st.ind.filter(x=>x!==I.id);else st.ind.push(I.id);prune();renderAll();}},
+        el("b",{text:I.nome}),el("span",{text:I.luogo})));
+    }
+  }
+  function renderCls(){
+    const box=$("clsPanels");box.replaceChildren();
+    const ch=chosen();
+    $("clsHint").textContent=ch.length?"Tocca le classi in cui insegni.":"Prima scegli almeno un indirizzo.";
+    for(const I of ch){
+      const years={};for(const k of I.classi)(years[annoOf(k)]=years[annoOf(k)]||[]).push(k);
+      const p=el("div",{class:"panel"});
+      p.append(el("div",{class:"panel-h"},
+        el("h3",{},I.breve,el("small",{text:I.luogo})),
+        el("div",{},el("button",{class:"linkbtn",text:"Tutte",on:()=>{for(const c of I.classi){const k=cid(I,c);if(!st.cls.includes(k))st.cls.push(k);}renderAll();}}),
+                     el("button",{class:"linkbtn",text:"Nessuna",on:()=>{const ks=I.classi.map(c=>cid(I,c));st.cls=st.cls.filter(k=>!ks.includes(k));renderAll();}}))));
+      for(const y of Object.keys(years).sort()){
+        const pills=el("div",{class:"pills"});
+        for(const c of years[y]){
+          const k=cid(I,c),on=st.cls.includes(k);
+          pills.append(el("button",{class:"pill","aria-pressed":String(on),"aria-label":"Classe "+c+", "+I.breve,text:c,on:()=>{
+            if(on)st.cls=st.cls.filter(x=>x!==k);else st.cls.push(k);renderAll();}}));
+        }
+        p.append(el("div",{class:"row"},el("div",{class:"anno",text:y+"ª"}),pills));
+      }
+      if(!I.classi.some(c=>st.cls.includes(cid(I,c))))p.append(el("p",{class:"nocls",text:"Nessuna classe scelta: vedrai solo gli impegni comuni della sede."}));
+      box.append(p);
+    }
+  }
+  const COL={classe:"var(--mare)",coll:"var(--viola)",fam:"var(--ocra)",glo:"var(--glo)",cal:"var(--cal)"};
+  function renderList(){
+    const {list,clashes,hidden}=compute({sel:selForCompute(),opts:st.opts,hidden:st.hidden},todayISO);
+    for(const e of [...list,...hidden]){
+      if(e.cat==="classe")e.place=label(e.ist[0],e.cls);
+    }
+    current=list;
+    const box=$("list");box.replaceChildren();
+    if(!st.ind.length)box.append(el("div",{class:"empty",text:"Scegli un indirizzo e le tue classi: qui compariranno i tuoi appuntamenti."}));
+    else if(!list.length)box.append(el("div",{class:"empty",text:"Nessun appuntamento con queste scelte. Aggiungi una classe o attiva altre voci in «Cosa aggiungere»."}));
+    else{
+      if(clashes)box.append(el("div",{class:"alert",text:(clashes===1?"C'è 1 sovrapposizione":"Ci sono "+clashes+" sovrapposizioni")+" fra impegni di sedi o classi diverse: le trovi segnate in rosso. Conviene avvisare per tempo i coordinatori."}));
+      let lastM="";
+      for(const e of list){
+        const dt=parseD(e.d),mk=dt.getFullYear()+"-"+dt.getMonth();
+        if(mk!==lastM){lastM=mk;const m=MESI[dt.getMonth()];box.append(el("h3",{class:"month",text:m[0].toUpperCase()+m.slice(1)+" "+dt.getFullYear()}));}
+        let when;
+        if(e.all){if(e.to){const t=parseD(e.to);when="Dal "+dt.getDate()+(t.getMonth()!==dt.getMonth()?" "+MESI[dt.getMonth()]:"")+" al "+t.getDate()+" "+MESI[t.getMonth()]+(t.getFullYear()!==dt.getFullYear()?" "+t.getFullYear():"");}
+                  else when="Tutto il giorno";}
+        else when=e.s.replace(":",".")+" – "+e.e.replace(":",".");
+        box.append(el("div",{class:"ev",style:"--c:"+COL[e.cat]},
+          el("div",{class:"leaf"},el("small",{text:GG[dt.getDay()]}),el("strong",{text:String(dt.getDate())})),
+          el("div",{class:"ev-b"},el("h4",{text:e.t}),el("div",{class:"meta"},el("b",{text:when}),"  "+e.place),
+            e.note?el("div",{class:"note",text:e.note}):null,
+            e.clash?el("div",{class:"clash",text:"Si sovrappone a: "+e.clash.join("; ")}):null,
+            el("div",{class:"ev-acts"},
+              el("a",{class:"gcal",href:gcal(e),target:"_blank",rel:"noopener",text:"Aggiungi a Google Calendar"}),
+              el("button",{class:"rm","aria-label":"Togli: "+e.t+" del "+dt.getDate()+" "+MESI[dt.getMonth()],text:"Togli",
+                on:()=>{st.hidden.push(e.id);save();renderList();}})))));
+      }
+    }
+    if(hidden.length){
+      const det=el("details",{class:"tolti"},
+        el("summary",{text:"Appuntamenti tolti ("+hidden.length+")"}),
+        el("p",{text:"Non compaiono nell'elenco né nel file da scaricare. Se li avevi già importati, cancellali anche dal calendario del telefono."}));
+      for(const e of hidden){const dt=parseD(e.d);
+        det.append(el("div",{class:"trow"},
+          el("span",{text:GG[dt.getDay()]+" "+dt.getDate()+" "+MESI[dt.getMonth()]+": "+e.t+(e.cat==="classe"?" ("+e.place+")":"")}),
+          el("button",{class:"linkbtn",text:"Rimetti",on:()=>{st.hidden=st.hidden.filter(x=>x!==e.id);save();renderList();}})));}
+      if(hidden.length>1)det.append(el("div",{class:"trow"},el("span"),el("button",{class:"linkbtn",text:"Rimetti tutti",on:()=>{
+        const ids=hidden.map(x=>x.id);st.hidden=st.hidden.filter(x=>!ids.includes(x));save();renderList();}})));
+      box.append(det);
+    }
+    const n=list.length;
+    $("count").replaceChildren(...[n?(n===1?"1 appuntamento":n+" appuntamenti"):"Nessun appuntamento",
+      clashes?el("small",{text:clashes===1?"1 sovrapposizione":clashes+" sovrapposizioni"}):null].filter(Boolean));
+    $("dl").disabled=!n;
+  }
+  function renderAll(){save();renderIst();renderCls();renderList();}
+
+  for(const k of ["coll","fam","glo","cal","past"]){
+    const c=$("o-"+k);c.checked=!!st.opts[k];
+    c.addEventListener("change",()=>{st.opts[k]=c.checked;save();renderList();});
+  }
+  const al=$("o-alarm");al.value=st.opts.alarm;al.addEventListener("change",()=>{st.opts.alarm=al.value;save();});
+  $("dl").addEventListener("click",()=>{
+    if(!current.length)return;
+    const blob=new Blob([buildICS(current,st.opts.alarm)],{type:"text/calendar;charset=utf-8"});
+    const url=URL.createObjectURL(blob);const a=el("a",{href:url,download:"impegni-scuola-2026-27.ics"});
+    document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000);
+  });
+  renderAll();
+}
+if(typeof document!=="undefined")init();
+if(typeof module!=="undefined")module.exports={compute,buildICS};
+</script>
+</body>
+</html>
