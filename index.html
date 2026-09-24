@@ -408,6 +408,14 @@ function init(){
   const KEY="impegni-2026-27-v2";
   let st={ind:[],cls:[],hidden:[],opts:{coll:true,fam:true,glo:true,cal:false,past:false,alarm:"60"}};
   try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s&&Array.isArray(s.ind)&&Array.isArray(s.cls))st={ind:s.ind,cls:s.cls,hidden:Array.isArray(s.hidden)?s.hidden:[],opts:{...st.opts,...(s.opts||{})}};}catch(_){}
+  // Scelte passate dall'app sulla schermata Home (vedi apriInSafari)
+  let daHome=false;
+  if(location.hash.startsWith("#stato=")){
+    try{const s=JSON.parse(decodeURIComponent(location.hash.slice(7)));
+      if(s&&Array.isArray(s.ind)&&Array.isArray(s.cls)){st={ind:s.ind,cls:s.cls,hidden:Array.isArray(s.hidden)?s.hidden:[],opts:{...st.opts,...(s.opts||{})}};daHome=true;
+        try{localStorage.setItem(KEY,JSON.stringify(st));}catch(_){}}}catch(_){}
+    history.replaceState(null,"",location.pathname+location.search);
+  }
   const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st));}catch(_){}};
   const $=id=>document.getElementById(id);
   const el=(tag,attrs={},...kids)=>{const n=document.createElement(tag);
@@ -508,7 +516,7 @@ function init(){
       clashes?el("small",{text:clashes===1?"1 sovrapposizione":clashes+" sovrapposizioni"}):null].filter(Boolean));
     for(const id of ["dl2","print"])$(id).disabled=!n;
     for(const id of ["dl","add"])$(id).setAttribute("aria-disabled",String(!n));
-    $("howHint").textContent=n?"Segui questi passaggi: bastano pochi secondi.":"Scegli prima un indirizzo e le classi.";
+    $("howHint").textContent=n?(daHome?"Le tue scelte sono arrivate dall'icona: ora tocca «Aggiungi al calendario».":"Segui questi passaggi: bastano pochi secondi."):"Scegli prima un indirizzo e le classi.";
     if(window.__syncIcs)window.__syncIcs();
   }
   function renderAll(){save();renderIst();renderCls();renderList();}
@@ -547,6 +555,13 @@ function init(){
     try{const body=ics();caches.open("impegni-ics").then(c=>c.put("/__impegni_ics__",new Response(body,{headers:{"Content-Type":"text/calendar; charset=utf-8"}}))).catch(()=>{});}catch(e){showErr(e.message);}
   };
   window.__syncIcs();
+  if(daHome){$("howHint").textContent="Le tue scelte sono arrivate dall'icona: ora tocca «Aggiungi al calendario».";
+    setTimeout(()=>$("add").scrollIntoView({behavior:"smooth",block:"center"}),300);}
+  // Dall'app sulla schermata Home: riapre la stessa pagina in Safari con le stesse scelte
+  function apriInSafari(){
+    const u=location.origin+location.pathname+"#stato="+encodeURIComponent(JSON.stringify({ind:st.ind,cls:st.cls,hidden:st.hidden,opts:st.opts}));
+    location.href="x-safari-"+u;
+  }
   function shareFile(){
     const f=new File([ics()],FN,{type:"text/calendar"});
     if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f]}).catch(()=>{});
@@ -554,7 +569,7 @@ function init(){
   }
   function add(ev){
     if(!current.length){ev.preventDefault();return;}
-    if(iOS&&standalone){ev.preventDefault();shareFile();return;}
+    if(iOS&&standalone){ev.preventDefault();apriInSafari();return;}
     if(iOS&&!inApp){
       const a=ev.currentTarget;
       if(swReady&&navigator.serviceWorker.controller){
@@ -570,10 +585,10 @@ function init(){
   }
   let steps,alt;
   if(iOS&&standalone){
-    steps=["Tocca «Aggiungi al calendario»: si apre il pannello di condivisione.",
-           "Scegli «Salva su File» e salva il file.",
-           "Apri l'app File, tocca il file e poi «Aggiungi tutti»."];
-    alt="Più semplice: apri la pagina in Safari invece che dall'icona, e il calendario si apre direttamente. Se aggiungi l'icona alla schermata Home, disattiva «Apri come app web».";
+    steps=["Tocca «Aggiungi al calendario»: la pagina si riapre in Safari con le tue scelte.",
+           "In Safari tocca di nuovo «Aggiungi al calendario».",
+           "Tocca «Aggiungi tutti», scegli il calendario e poi «Fine»."];
+    alt="Se Safari non si apre, tocca «Scarica il file», scegli «Salva su File», poi apri il file dall'app File e tocca «Aggiungi tutti».";
   }else if(iOS&&inApp){
     steps=["Tocca i tre puntini o il pulsante Condividi del browser e scegli «Apri in Safari» (oppure copia l'indirizzo e incollalo in Safari).",
            "In Safari scegli di nuovo indirizzo e classi: le scelte non passano da un browser all'altro.",
