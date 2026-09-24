@@ -82,12 +82,41 @@ select{font:inherit;padding:6px 10px;border-radius:10px;border:1.5px solid var(-
 .empty{background:var(--card);border:1.5px dashed var(--line);border-radius:14px;padding:22px;color:var(--ink2)}
 .alert{background:var(--warn-t);color:var(--warn);border-radius:12px;padding:10px 14px;font-size:.95rem;margin-bottom:10px}
 .bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding:12px 18px calc(12px + env(safe-area-inset-bottom,0px));z-index:5}
+.iosnote{max-width:760px;margin:0 auto 8px;font-size:.85rem;color:var(--warn);background:var(--warn-t);border-radius:10px;padding:6px 10px}
 .bar-in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:12px;justify-content:space-between}
 .count{font:600 1rem/1.25 var(--head)}
 .count small{display:block;font:400 .82rem var(--body);color:var(--ink2)}
 .btn{appearance:none;border:0;background:var(--viola);color:var(--on);font-weight:700;padding:12px 18px;border-radius:12px;cursor:pointer;flex:none}
 .btn:disabled{opacity:.35;cursor:not-allowed}
 :focus-visible{outline:3px solid var(--ocra);outline-offset:2px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
+.steps{margin:0 0 14px;padding-left:1.3em}
+.steps li{margin:0 0 6px}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.btn2{appearance:none;border:1.5px solid var(--viola);color:var(--viola);background:transparent;font-weight:700;padding:10px 14px;border-radius:12px;cursor:pointer;font-size:.95rem}
+.btn2.solid{background:var(--viola);color:var(--on)}
+.btn2:disabled{opacity:.35;cursor:not-allowed}
+.small{font-size:.85rem;color:var(--ink2);margin:10px 0 0}
+.listhead{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.listhead h2{margin:0}
+#printArea{display:none}
+@media print{
+  :root{padding:0}
+  body{background:#fff;color:#000}
+  .wrap,.bar{display:none!important}
+  #printArea{display:block;font:10.5pt/1.4 var(--body);color:#000}
+  #printArea h1{font:800 17pt/1.1 var(--head);margin:0 0 4pt;letter-spacing:-.01em}
+  #printArea .psub{margin:0 0 10pt;font-size:10pt}
+  #printArea table{width:100%;border-collapse:collapse}
+  #printArea th{text-align:left;font-size:8.5pt;border-bottom:1pt solid #000;padding:3pt 5pt}
+  #printArea td{vertical-align:top;border-bottom:.5pt solid #bbb;padding:4pt 5pt}
+  #printArea tr{break-inside:avoid}
+  #printArea tr.pm td{font:700 10.5pt var(--head);border-bottom:1pt solid #000;padding-top:10pt}
+  #printArea .pn{font-size:8.5pt;color:#444}
+  #printArea .pc{font-size:8.5pt;font-weight:700}
+  #printArea .pf{margin-top:12pt;font-size:8pt;color:#444}
+  @page{margin:14mm}
+}
 footer{margin-top:44px;font-size:.9rem;color:var(--ink2)}
 footer h2{font-size:1.1rem;color:var(--ink)}
 footer p{margin:0 0 10px;max-width:62ch}
@@ -127,8 +156,24 @@ footer p{margin:0 0 10px;max-width:62ch}
     </div>
   </section>
 
+  <section id="collega">
+    <h2>Aggiungi al calendario</h2>
+    <p class="hint" id="howHint">Scegli prima un indirizzo e le classi.</p>
+    <div class="box">
+      <ol class="steps" id="steps"></ol>
+      <div class="acts">
+        <button class="btn2 solid" id="add" disabled>Aggiungi al calendario</button>
+        <button class="btn2" id="dl2" disabled>Scarica il file</button>
+      </div>
+      <p class="small" id="howAlt"></p>
+    </div>
+  </section>
+
   <section>
-    <h2>I tuoi appuntamenti</h2>
+    <div class="listhead">
+      <h2>I tuoi appuntamenti</h2>
+      <button class="btn2" id="print" disabled>Stampa o salva in PDF</button>
+    </div>
     <div class="legend">
       <span style="--c:var(--mare)">Consigli e scrutini</span><span style="--c:var(--viola)">Collegiali</span><span style="--c:var(--ocra)">Famiglie</span><span style="--c:var(--glo)">GLO</span><span style="--c:var(--cal)">Calendario</span>
     </div>
@@ -136,17 +181,17 @@ footer p{margin:0 0 10px;max-width:62ch}
   </section>
 
   <footer>
-    <h2>Come aggiungerli al calendario</h2>
-    <p><b>iPhone:</b> tocca «Scarica per il calendario», apri il file e scegli «Aggiungi tutti».</p>
-    <p><b>Android:</b> il modo più sicuro è Google Calendar dal computer: calendar.google.com, Impostazioni, Importa ed esporta, scegli il file. Gli eventi compaiono poi anche sul telefono. In alternativa, ogni appuntamento ha il suo link «Aggiungi a Google Calendar».</p>
-    <p>Se il piano cambia, puoi riscaricare il file: gli appuntamenti già importati vengono aggiornati invece che duplicati sulla maggior parte dei calendari.</p>
+    <h2>Da sapere</h2>
+    <p>Se il piano cambia, aggiungi di nuovo gli appuntamenti: quelli già presenti vengono aggiornati invece che duplicati sulla maggior parte dei calendari. Quelli che togli dall'app vanno cancellati anche dal calendario del telefono.</p>
     <p>Le date riproducono il Piano annuale delle attività 2026/27, che può subire variazioni. In caso di dubbio fanno fede le comunicazioni ufficiali della scuola. Le durate di collegi e dipartimenti sono indicative.</p>
   </footer>
 </div>
 
-<div class="bar"><div class="bar-in">
+<div id="printArea"></div>
+
+<div class="bar"><div class="iosnote" id="iosnote" hidden>Su iPhone gli appuntamenti si aggiungono al calendario solo da Safari: copia l'indirizzo di questa pagina e aprilo in Safari.</div><div class="bar-in">
   <div class="count" id="count" aria-live="polite">Nessun appuntamento</div>
-  <button class="btn" id="dl" disabled>Scarica per il calendario</button>
+  <button class="btn" id="dl" disabled>Aggiungi al calendario</button>
 </div></div>
 
 <script>
@@ -453,7 +498,8 @@ function init(){
     const n=list.length;
     $("count").replaceChildren(...[n?(n===1?"1 appuntamento":n+" appuntamenti"):"Nessun appuntamento",
       clashes?el("small",{text:clashes===1?"1 sovrapposizione":clashes+" sovrapposizioni"}):null].filter(Boolean));
-    $("dl").disabled=!n;
+    for(const id of ["dl","add","dl2","print"])$(id).disabled=!n;
+    $("howHint").textContent=n?"Segui questi passaggi: bastano pochi secondi.":"Scegli prima un indirizzo e le classi.";
   }
   function renderAll(){save();renderIst();renderCls();renderList();}
 
@@ -462,12 +508,76 @@ function init(){
     c.addEventListener("change",()=>{st.opts[k]=c.checked;save();renderList();});
   }
   const al=$("o-alarm");al.value=st.opts.alarm;al.addEventListener("change",()=>{st.opts.alarm=al.value;save();});
-  $("dl").addEventListener("click",()=>{
+  const ua=navigator.userAgent;
+  const iOS=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1);
+  const inApp=/CriOS|FxiOS|EdgiOS|OPiOS|GSA\/|FBAN|FBAV|Instagram|WhatsApp|Telegram|Line\//.test(ua);
+  const android=/Android/.test(ua);
+  const FN="impegni-scuola-2026-27.ics";
+  const ics=()=>buildICS(current,st.opts.alarm);
+  function download(){
+    const blob=new Blob([ics()],{type:"text/calendar;charset=utf-8"});
+    const url=URL.createObjectURL(blob);const a=el("a",{href:url,download:FN});
+    document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),10000);
+  }
+  function add(){
     if(!current.length)return;
-    const blob=new Blob([buildICS(current,st.opts.alarm)],{type:"text/calendar;charset=utf-8"});
-    const url=URL.createObjectURL(blob);const a=el("a",{href:url,download:"impegni-scuola-2026-27.ics"});
-    document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000);
-  });
+    if(iOS&&!inApp){
+      // Safari apre direttamente l'anteprima del Calendario con «Aggiungi tutti»
+      location.href="data:text/calendar;charset=utf-8,"+encodeURIComponent(ics());
+    }else download();
+  }
+  let steps,alt;
+  if(iOS&&inApp){
+    steps=["Tocca i tre puntini o il pulsante Condividi del browser e scegli «Apri in Safari» (oppure copia l'indirizzo e incollalo in Safari).",
+           "In Safari scegli di nuovo indirizzo e classi: le scelte non passano da un browser all'altro.",
+           "Tocca «Aggiungi al calendario» e poi «Aggiungi tutti»."];
+    alt="Da questo browser puoi solo salvare il file: poi aprilo dall'app File, cartella Download.";
+  }else if(iOS){
+    steps=["Tocca «Aggiungi al calendario».",
+           "Si apre l'elenco degli appuntamenti: tocca «Aggiungi tutti» in alto.",
+           "Scegli il calendario in cui metterli (per esempio «Casa» o «Lavoro») e tocca «Fine»."];
+    alt="Se non si apre nulla, tocca «Scarica il file», poi apri l'app File, cartella Download, e tocca il file.";
+  }else if(android){
+    steps=["Tocca «Aggiungi al calendario»: il file si scarica.",
+           "Apri la notifica del download, oppure l'app File nella cartella Download, e tocca il file.",
+           "Scegli l'app Calendario del telefono e conferma l'importazione."];
+    alt="Se nessuna app apre il file (capita con Google Calendar), importalo dal computer: calendar.google.com, Impostazioni, Importa ed esporta. In alternativa usa i link «Aggiungi a Google Calendar» di ogni appuntamento.";
+  }else{
+    steps=["Clicca «Aggiungi al calendario»: il file si scarica.",
+           "Aprilo con un doppio clic (Calendario di Mac, Outlook) oppure, per Google Calendar, vai su calendar.google.com, Impostazioni, Importa ed esporta, e scegli il file."];
+    alt="";
+  }
+  $("steps").replaceChildren(...steps.map(t=>el("li",{text:t})));
+  $("howAlt").textContent=alt;
+  if(iOS&&inApp)$("iosnote").hidden=false;
+  $("add").addEventListener("click",add);
+  $("dl").addEventListener("click",add);
+  $("dl2").addEventListener("click",()=>{if(current.length)download();});
+
+  function buildPrint(){
+    const area=$("printArea");area.replaceChildren();
+    const sel=chosen().map(I=>{const c=I.classi.filter(x=>st.cls.includes(cid(I,x)));return I.breve+(c.length?": "+c.join(", "):"");}).join(" – ");
+    const now=new Date();
+    area.append(el("h1",{text:"I miei impegni 2026/27"}),
+      el("p",{class:"psub",text:sel+". Aggiornato al "+now.getDate()+" "+MESI[now.getMonth()]+" "+now.getFullYear()+"."}));
+    const tb=el("tbody");
+    const table=el("table",{},el("thead",{},el("tr",{},el("th",{text:"Giorno"}),el("th",{text:"Orario"}),el("th",{text:"Impegno"}))),tb);
+    let lastM="";
+    for(const e of current){
+      const dt=parseD(e.d),mk=dt.getFullYear()+"-"+dt.getMonth();
+      if(mk!==lastM){lastM=mk;const m=MESI[dt.getMonth()];tb.append(el("tr",{class:"pm"},el("td",{colspan:"3",text:m[0].toUpperCase()+m.slice(1)+" "+dt.getFullYear()})));}
+      const when=e.all?(e.to?"dal "+dt.getDate()+" al "+parseD(e.to).getDate()+" "+MESI[parseD(e.to).getMonth()]:"tutto il giorno"):e.s.replace(":",".")+"–"+e.e.replace(":",".");
+      tb.append(el("tr",{},
+        el("td",{text:GG[dt.getDay()]+" "+dt.getDate()}),
+        el("td",{text:when}),
+        el("td",{},e.t+(e.place?" – "+e.place:""),
+          e.note?el("div",{class:"pn",text:e.note}):null,
+          e.clash?el("div",{class:"pc",text:"Si sovrappone a: "+e.clash.join("; ")}):null)));
+    }
+    area.append(table,el("p",{class:"pf",text:"Fonte: Piano annuale delle attività 2026/27, I.I.S. Pisticci-Montalbano. Il piano può subire variazioni: fanno fede le comunicazioni ufficiali della scuola."}));
+  }
+  $("print").addEventListener("click",()=>{buildPrint();window.print();});
+  window.addEventListener("beforeprint",buildPrint);
   renderAll();
 }
 if(typeof document!=="undefined")init();
