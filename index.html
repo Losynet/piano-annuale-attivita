@@ -101,15 +101,6 @@ select{font:inherit;padding:6px 10px;border-radius:10px;border:1.5px solid var(-
 .btn2.solid{background:var(--viola);color:var(--on)}
 .btn2:disabled{opacity:.35;cursor:not-allowed}
 html.abbonamento.dev-ios .gcal{display:none}
-.btn{min-width:0;line-height:1.2;flex:0 1 auto}
-.count{min-width:0}
-html.iscritto #dl{background:transparent;color:var(--mare);border:1.5px solid var(--mare);padding:10px 12px;animation:okpop .45s}
-html.iscritto #dl.agg{color:var(--ink2);border-color:var(--line);animation:none}
-html.iscritto #dl.err{color:var(--warn);border-color:var(--warn)}
-@keyframes okpop{0%{transform:scale(1.08)}100%{transform:scale(1)}}
-#estrema>summary{cursor:pointer;color:var(--ink2);font-size:.9rem;padding:2px 0}
-html:not(.iscritto) #estrema>summary{display:none}
-#okline{margin:0 0 10px;font-size:.95rem}
 a.btn,a.btn2{display:inline-block;text-decoration:none;text-align:center;-webkit-tap-highlight-color:transparent}
 a[aria-disabled="true"]{opacity:.35;pointer-events:none}
 .small{font-size:.85rem;color:var(--ink2);margin:10px 0 0}
@@ -176,20 +167,14 @@ footer p{margin:0 0 10px;max-width:62ch}
     <h2>Aggiungi al calendario</h2>
     <p class="hint" id="howHint">Scegli prima un indirizzo e le classi.</p>
     <div class="box">
-      <p id="okline" hidden><strong>✓ Sei iscritto.</strong> Per cambiare classi, appuntamenti o spunte (collegi, incontri con le famiglie, calendario scolastico…) basta modificarli qui sopra: il calendario sul telefono si aggiorna da solo, senza iscriverti di nuovo.</p>
-      <details id="estrema" open>
-        <summary>Non vedi il calendario sul telefono? Iscriviti di nuovo</summary>
-        <p class="small" id="estremaNota" hidden>Serve solo se «Impegni scuola 2026/27» non compare in Calendario, per esempio perché l'iscrizione non era andata a buon fine. Altrimenti ti ritroveresti un calendario doppio.</p>
-        <ol class="steps" id="steps"></ol>
-        <div class="acts">
-          <a class="btn2 solid" id="add" href="#" role="button" aria-disabled="true">Aggiungi al calendario</a>
-          <button class="btn2" id="dl2" disabled>Scarica il file</button>
-          <button class="btn2" id="copyUrl" hidden disabled>Copia l'indirizzo del calendario</button>
-        </div>
-        <p class="small" id="howAlt"></p>
-      </details>
+      <ol class="steps" id="steps"></ol>
+      <div class="acts">
+        <a class="btn2 solid" id="add" href="#" role="button" aria-disabled="true">Aggiungi al calendario</a>
+        <button class="btn2" id="dl2" disabled>Scarica il file</button>
+        <button class="btn2" id="copyUrl" hidden disabled>Copia l'indirizzo del calendario</button>
+      </div>
+      <p class="small" id="howAlt"></p>
       <p class="small" id="sync" hidden></p>
-      <p class="small" id="dup" hidden>Controllo: in Calendario, tocca «Calendari» in basso. Se «Impegni scuola 2026/27» compare più volte, tieni un solo calendario ed elimina gli altri (tocca ⓘ accanto al nome, poi «Elimina calendario»).</p>
       <p class="small" id="err" hidden style="color:var(--warn)"></p>
     </div>
   </section>
@@ -276,12 +261,34 @@ footer p{margin:0 0 10px;max-width:62ch}
   {"d":"2027-04-27","s":"16:30","e":"19:30","cat":"fam","t":"2° incontro con le famiglie, IPSEOA","ist":["IPS"]},
   {"d":"2027-04-28","s":"16:30","e":"19:30","cat":"fam","t":"2° incontro con le famiglie, ITAA","ist":["ITA"]},
   {"d":"2027-04-30","s":"16:30","e":"19:30","cat":"fam","t":"2° incontro con le famiglie, triennio di tutti gli indirizzi","ist":["IPS","ITA","ITT","CLA"],"loc":"I.I.S. Pisticci – Montalbano Jonico (sede da confermare)","tri":true},
-  {"d":"2026-10-27","all":true,"cat":"glo","t":"GLO c/o IPSEOA Marconia","ist":["IPS","ITA","ITT","CLA"],"loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Orari da definire."},
-  {"d":"2026-10-28","all":true,"cat":"glo","t":"GLO c/o IPSEOA Marconia","ist":["IPS","ITA","ITT","CLA"],"loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Orari da definire."},
-  {"d":"2026-10-29","all":true,"cat":"glo","t":"GLO c/o IPSEOA Marconia","ist":["IPS","ITA","ITT","CLA"],"loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Orari da definire."},
-  {"d":"2026-11-05","all":true,"cat":"glo","t":"GLO c/o IPSEOA Marconia","ist":["IPS","ITA","ITT","CLA"],"loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Orari da definire."},
-  {"d":"2026-11-10","all":true,"cat":"glo","t":"GLO c/o IPSEOA Marconia","ist":["IPS","ITA","ITT","CLA"],"loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Orari da definire."},
-  {"d":"2026-11-12","all":true,"cat":"glo","t":"GLO c/o IPSEOA Marconia","ist":["IPS","ITA","ITT","CLA"],"loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Orari da definire."},
+  {"d":"2026-10-27","s":"14:00","dur":80,"cat":"glo","t":"GLO I A","ist":["ITA"],"cls":"I A","loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Circolare n. 18. Insediamento GLO e condivisione delle linee del PEI. 4 GLO di seguito, ore 14.00, 14.20, 14.40, 15.00."},
+  {"d":"2026-10-27","s":"15:20","dur":40,"cat":"glo","t":"GLO II A","ist":["ITA"],"cls":"II A","loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Circolare n. 18. Insediamento GLO e condivisione delle linee del PEI. 2 GLO di seguito, ore 15.20, 15.40."},
+  {"d":"2026-10-27","s":"16:00","dur":20,"cat":"glo","t":"GLO II B","ist":["ITA"],"cls":"II B","loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Circolare n. 18. Insediamento GLO e condivisione delle linee del PEI."},
+  {"d":"2026-10-27","s":"16:20","dur":20,"cat":"glo","t":"GLO III B PT","ist":["ITA"],"cls":"III B PT","loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Circolare n. 18. Insediamento GLO e condivisione delle linee del PEI."},
+  {"d":"2026-10-27","s":"16:40","dur":20,"cat":"glo","t":"GLO IV A GAT","ist":["ITA"],"cls":"IV A GAT","loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Circolare n. 18. Insediamento GLO e condivisione delle linee del PEI."},
+  {"d":"2026-10-27","s":"17:00","dur":20,"cat":"glo","t":"GLO IV B PT","ist":["ITA"],"cls":"IV B PT","loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Circolare n. 18. Insediamento GLO e condivisione delle linee del PEI."},
+  {"d":"2026-10-29","s":"14:00","dur":20,"cat":"glo","t":"GLO IV A GAT","ist":["ITA"],"cls":"IV A GAT","loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Circolare n. 18. Insediamento GLO e condivisione delle linee del PEI."},
+  {"d":"2026-10-29","s":"14:20","dur":20,"cat":"glo","t":"GLO V A GAT","ist":["ITA"],"cls":"V A GAT","loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Circolare n. 18. Insediamento GLO e condivisione delle linee del PEI."},
+  {"d":"2026-10-29","s":"14:40","dur":20,"cat":"glo","t":"GLO V B PT","ist":["ITA"],"cls":"V B PT","loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Circolare n. 18. Insediamento GLO e condivisione delle linee del PEI."},
+  {"d":"2026-10-29","s":"15:00","dur":60,"cat":"glo","t":"GLO I A","ist":["IPS"],"cls":"I A","loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Circolare n. 18. Insediamento GLO e condivisione delle linee del PEI. 3 GLO di seguito, ore 15.00, 15.20, 15.40."},
+  {"d":"2026-10-29","s":"16:00","dur":40,"cat":"glo","t":"GLO I B","ist":["IPS"],"cls":"I B","loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Circolare n. 18. Insediamento GLO e condivisione delle linee del PEI. 2 GLO di seguito, ore 16.00, 16.20."},
+  {"d":"2026-10-29","s":"16:40","dur":40,"cat":"glo","t":"GLO I C","ist":["IPS"],"cls":"I C","loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Circolare n. 18. Insediamento GLO e condivisione delle linee del PEI. 2 GLO di seguito, ore 16.40, 17.00."},
+  {"d":"2026-11-05","s":"14:00","dur":40,"cat":"glo","t":"GLO II A","ist":["IPS"],"cls":"II A","loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Circolare n. 18. Insediamento GLO e condivisione delle linee del PEI. 2 GLO di seguito, ore 14.00, 14.20."},
+  {"d":"2026-11-05","s":"14:40","dur":40,"cat":"glo","t":"GLO II B","ist":["IPS"],"cls":"II B","loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Circolare n. 18. Insediamento GLO e condivisione delle linee del PEI. 2 GLO di seguito, ore 14.40, 15.00."},
+  {"d":"2026-11-05","s":"15:20","dur":20,"cat":"glo","t":"GLO III A Eno","ist":["IPS"],"cls":"III A Eno","loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Circolare n. 18. Insediamento GLO e condivisione delle linee del PEI."},
+  {"d":"2026-11-05","s":"15:40","dur":20,"cat":"glo","t":"GLO III A AT","ist":["IPS"],"cls":"III A AT","loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Circolare n. 18. Insediamento GLO e condivisione delle linee del PEI."},
+  {"d":"2026-11-05","s":"16:00","dur":40,"cat":"glo","t":"GLO IV A Sala","ist":["IPS"],"cls":"IV A Sala","loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Circolare n. 18. Insediamento GLO e condivisione delle linee del PEI. 2 GLO di seguito, ore 16.00, 16.20."},
+  {"d":"2026-11-05","s":"16:40","dur":20,"cat":"glo","t":"GLO IV A Eno","ist":["IPS"],"cls":"IV A Eno","loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Circolare n. 18. Insediamento GLO e condivisione delle linee del PEI."},
+  {"d":"2026-11-05","s":"17:00","dur":20,"cat":"glo","t":"GLO V A Eno","ist":["IPS"],"cls":"V A Eno","loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Circolare n. 18. Insediamento GLO e condivisione delle linee del PEI."},
+  {"d":"2026-11-05","s":"17:20","dur":20,"cat":"glo","t":"GLO V A AT","ist":["IPS"],"cls":"V A AT","loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Circolare n. 18. Insediamento GLO e condivisione delle linee del PEI."},
+  {"d":"2026-11-05","s":"17:40","dur":20,"cat":"glo","t":"GLO III AE Serale","ist":["IPS"],"cls":"III AE Serale","loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Circolare n. 18. Insediamento GLO e condivisione delle linee del PEI."},
+  {"d":"2026-11-05","s":"18:00","dur":20,"cat":"glo","t":"GLO V AE Serale","ist":["IPS"],"cls":"V AE Serale","loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Circolare n. 18. Insediamento GLO e condivisione delle linee del PEI."},
+  {"d":"2026-11-12","s":"14:00","dur":40,"cat":"glo","t":"GLO I A","ist":["ITT"],"cls":"I A","loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Circolare n. 18. Insediamento GLO e condivisione delle linee del PEI. 2 GLO di seguito, ore 14.00, 14.20."},
+  {"d":"2026-11-12","s":"14:40","dur":20,"cat":"glo","t":"GLO II A","ist":["ITT"],"cls":"II A","loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Circolare n. 18. Insediamento GLO e condivisione delle linee del PEI."},
+  {"d":"2026-11-12","s":"15:00","dur":40,"cat":"glo","t":"GLO II B","ist":["ITT"],"cls":"II B","loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Circolare n. 18. Insediamento GLO e condivisione delle linee del PEI. 2 GLO di seguito, ore 15.00, 15.20."},
+  {"d":"2026-11-12","s":"15:40","dur":40,"cat":"glo","t":"GLO III A Tel","ist":["ITT"],"cls":"III A Tel","loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Circolare n. 18. Insediamento GLO e condivisione delle linee del PEI. 2 GLO di seguito, ore 15.40, 16.00."},
+  {"d":"2026-11-12","s":"16:20","dur":20,"cat":"glo","t":"GLO I A","ist":["CLA"],"cls":"I A","loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Circolare n. 18. Insediamento GLO e condivisione delle linee del PEI."},
+  {"d":"2026-11-12","s":"16:40","dur":20,"cat":"glo","t":"GLO III A","ist":["CLA"],"cls":"III A","loc":"c/o IPSEOA, Via Nazionale, Marconia di Pisticci (MT)","note":"Circolare n. 18. Insediamento GLO e condivisione delle linee del PEI."},
   {"d":"2026-09-14","all":true,"cat":"cal","t":"Inizio delle lezioni","ist":["IPS","ITA","ITT"]},
   {"d":"2026-09-16","all":true,"cat":"cal","t":"Inizio delle lezioni","ist":["CLA"]},
   {"d":"2026-11-02","all":true,"cat":"cal","t":"Lezioni sospese","ist":["IPS","ITA","ITT","CLA"]},
@@ -339,6 +346,7 @@ function compute(st,today){
   for(const ev of CLASS_EV) if(has(ev.ist[0])&&sel[ev.ist[0]].includes(ev.cls)) res.push({...ev});
   for(const g of GEN){
     if(!g.ist.some(has)) continue;
+    if(g.cls&&!(has(g.ist[0])&&sel[g.ist[0]].includes(g.cls))) continue; // impegno di una sola classe
     if((g.cat==="coll"&&!o.coll)||(g.cat==="fam"&&!o.fam)||(g.cat==="glo"&&!o.glo)||(g.cat==="cal"&&!o.cal)) continue;
     if(g.tri&&!tri) continue;
     const ev={...g};ev.fin=!!g.e;
@@ -385,7 +393,7 @@ function buildICS(list,alarm){
     "END:VTIMEZONE"];
   const alarmBlock=trig=>["BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:Promemoria","TRIGGER:"+trig,"END:VALARM"];
   for(const e of list){
-    const summary=e.cat==="classe"?e.t+", "+e.place:e.t;
+    const summary=(e.cat==="classe"||e.cls)?e.t+", "+e.place:e.t;
     const desc=[e.note,e.clash?"Attenzione: si sovrappone a "+e.clash.join("; "):"","Fonte: Piano annuale delle attività 2026/27, I.I.S. Pisticci-Montalbano"].filter(Boolean).join("\n");
     L.push("BEGIN:VEVENT","UID:"+hash(e.d+(e.s||"")+summary)+"-"+e.d.replace(/-/g,"")+"@impegni-2026-27","DTSTAMP:"+st,
       "SUMMARY:"+esc(summary),"DESCRIPTION:"+esc(desc));
@@ -405,7 +413,7 @@ function buildICS(list,alarm){
   return L.map(fold).join("\r\n")+"\r\n";
 }
 function gcal(e){
-  const p=new URLSearchParams({action:"TEMPLATE",text:e.cat==="classe"?e.t+", "+e.place:e.t,
+  const p=new URLSearchParams({action:"TEMPLATE",text:(e.cat==="classe"||e.cls)?e.t+", "+e.place:e.t,
     details:(e.note?e.note+"\n":"")+"Piano annuale delle attività 2026/27",location:e.loc||"",ctz:"Europe/Rome"});
   const d0=e.d.replace(/-/g,"");
   p.set("dates",e.all?d0+"/"+addDays(e.to||e.d,1).replace(/-/g,""):d0+"T"+e.s.replace(":","")+"00/"+d0+"T"+(e.fin?e.e:e.s).replace(":","")+"00");
@@ -429,7 +437,7 @@ function init(){
   const DEV=(/iPhone|iPad|iPod/.test(UA0)||(/Macintosh/.test(UA0)&&navigator.maxTouchPoints>1))?"ios":/Android/.test(UA0)?"android":"pc";
   const DEVNOME={ios:"iPhone",android:"Android",pc:"computer"}[DEV];
   document.documentElement.classList.add("dev-"+DEV);
-  if(WORKER){document.documentElement.classList.add("abbonamento");const dp=document.getElementById("dup");if(dp)dp.hidden=false;}
+  if(WORKER)document.documentElement.classList.add("abbonamento");
   let st={ind:[],cls:[],hidden:[],opts:{coll:true,fam:true,glo:true,cal:false,past:false,alarm:"60"}};
   try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s&&Array.isArray(s.ind)&&Array.isArray(s.cls))st={ind:s.ind,cls:s.cls,hidden:Array.isArray(s.hidden)?s.hidden:[],opts:{...st.opts,...(s.opts||{})}};}catch(_){}
   // Scelte passate dall'app sulla schermata Home (vedi apriInSafari)
@@ -437,9 +445,7 @@ function init(){
   if(location.hash.startsWith("#stato=")){
     try{const s=JSON.parse(decodeURIComponent(location.hash.slice(7)));
       if(s&&Array.isArray(s.ind)&&Array.isArray(s.cls)){st={ind:s.ind,cls:s.cls,hidden:Array.isArray(s.hidden)?s.hidden:[],opts:{...st.opts,...(s.opts||{})}};daHome=true;
-        try{localStorage.setItem(KEY,JSON.stringify(st));}catch(_){}
-        // Stesso codice di abbonamento dell'app sulla Home: un solo indirizzo, niente calendari doppi
-        try{if(typeof s.t==="string"&&/^[A-Za-z0-9_-]{16,64}$/.test(s.t)&&!localStorage.getItem("impegni-2026-27-token"))localStorage.setItem("impegni-2026-27-token",s.t);}catch(_){}}}catch(_){}
+        try{localStorage.setItem(KEY,JSON.stringify(st));}catch(_){}}}catch(_){}
     history.replaceState(null,"",location.pathname+location.search);
   }
   const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st));}catch(_){}if(window.__onSave)window.__onSave();};
@@ -542,9 +548,8 @@ function init(){
       clashes?el("small",{text:clashes===1?"1 sovrapposizione":clashes+" sovrapposizioni"}):null].filter(Boolean));
     for(const id of ["dl2","print","copyUrl"])$(id).disabled=!n;
     for(const id of ["dl","add"])$(id).setAttribute("aria-disabled",String(!n));
-    $("howHint").textContent=(window.__isc&&window.__isc()&&n)?"Cambia le spunte o gli impegni qui sotto: il calendario si aggiorna da solo.":n?(daHome?"Le tue scelte sono arrivate dall'icona: ora tocca «Aggiungi al calendario».":"Passaggi per "+DEVNOME+": bastano pochi secondi."):"Scegli prima un indirizzo e le classi.";
+    $("howHint").textContent=n?(daHome?"Le tue scelte sono arrivate dall'icona: ora tocca «Aggiungi al calendario».":"Passaggi per "+DEVNOME+": bastano pochi secondi."):"Scegli prima un indirizzo e le classi.";
     if(window.__syncIcs)window.__syncIcs();
-    if(window.__ui)window.__ui();
   }
   function renderAll(){save();renderIst();renderCls();renderList();}
 
@@ -578,17 +583,16 @@ function init(){
     navigator.serviceWorker.addEventListener("controllerchange",()=>{swReady=true;window.__syncIcs();});
   }
   if(WORKER&&!iOS&&!android){const g=el("a",{id:"gsub",href:"#",target:"_blank",text:"Iscriviti con Google Calendar"});$("howAlt").after(g);
-    g.addEventListener("click",()=>{try{localStorage.setItem(SKEY,"1");}catch(_){}try{syncNow();}catch(_){}g.href=subLinks().google;});}
+    g.addEventListener("click",()=>{g.href=subLinks().google;});}
   if(WORKER){const cb=$("copyUrl");cb.hidden=(DEV==="ios"); // su iPhone non serve
     cb.addEventListener("click",()=>{
       if(!current.length)return;
       try{localStorage.setItem(SKEY,"1");}catch(_){}
-      dopoSalvataggio(()=>{
-        const u=subLinks().https;
-        const ok=()=>{cb.textContent="Indirizzo copiato";setTimeout(()=>cb.textContent="Copia l'indirizzo del calendario",2500);};
-        if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(u).then(ok,()=>prompt("Copia questo indirizzo:",u));
-        else prompt("Copia questo indirizzo:",u);
-      });
+      try{syncNow();}catch(_){}
+      const u=subLinks().https;
+      const ok=()=>{cb.textContent="Indirizzo copiato";setTimeout(()=>cb.textContent="Copia l'indirizzo del calendario",2500);};
+      if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(u).then(ok,()=>prompt("Copia questo indirizzo:",u));
+      else prompt("Copia questo indirizzo:",u);
     });}
   window.__syncIcs=()=>{
     if(!("caches" in window)||!current.length)return;
@@ -599,7 +603,7 @@ function init(){
     setTimeout(()=>$("add").scrollIntoView({behavior:"smooth",block:"center"}),300);}
   // Dall'app sulla schermata Home: riapre la stessa pagina in Safari con le stesse scelte
   function apriInSafari(){
-    const u=location.origin+location.pathname+"#stato="+encodeURIComponent(JSON.stringify({ind:st.ind,cls:st.cls,hidden:st.hidden,opts:st.opts,t:WORKER?token():undefined}));
+    const u=location.origin+location.pathname+"#stato="+encodeURIComponent(JSON.stringify({ind:st.ind,cls:st.cls,hidden:st.hidden,opts:st.opts}));
     location.href="x-safari-"+u;
   }
   function shareFile(){
@@ -621,78 +625,46 @@ function init(){
   }
   const iscritto=()=>{try{return localStorage.getItem(SKEY)==="1";}catch(_){return false;}};
   const statoJSON=()=>JSON.stringify({ind:st.ind,cls:st.cls,hidden:st.hidden,opts:st.opts});
-  let lastSent=null,syncTimer=null,syncSt="ok",wasIsc=null;
-  window.__isc=iscritto;
+  let lastSent=null,syncTimer=null;
   function setSync(t,bad){const b=$("sync");b.hidden=false;b.textContent=t;b.style.color=bad?"var(--warn)":"";}
-  // Stato dell'aggiornamento mostrato nel pulsante in basso e nella sezione dei passaggi
-  function ui(){
-    const isc=iscritto();
-    document.documentElement.classList.toggle("iscritto",isc);
-    $("okline").hidden=!isc;$("estremaNota").hidden=!isc;
-    if(isc!==wasIsc){$("estrema").open=!isc;wasIsc=isc;}
-    const dl=$("dl");
-    if(isc){dl.textContent={agg:"Aggiorno…",ok:"✓ Aggiornato",err:"Non aggiornato"}[syncSt];dl.className="btn "+syncSt;}
-    else{dl.textContent="Iscriviti al calendario";dl.className="btn";}
-    $("add").textContent=isc?"Iscriviti di nuovo":"Iscriviti al calendario";
-  }
-  window.__ui=ui;
-  function setSt(x){syncSt=x;ui();}
   function syncNow(){
     if(!WORKER||!iscritto())return;
     const body=statoJSON();if(body===lastSent)return;
-    setSt("agg");
     fetch(W0+"/stato/"+token(),{method:"PUT",body,headers:{"Content-Type":"application/json"},keepalive:true})
-      .then(r=>{if(r.ok){lastSent=body;setSt("ok");setSync("Calendario aggiornato: le tue modifiche sono state inviate. Sul telefono compaiono da qualche minuto a qualche ora.");}
-                else if(r.status===501){setSt("err");setSync("Il calendario non può ricevere le modifiche: per applicarle iscriviti di nuovo.",true);}
+      .then(r=>{if(r.ok){lastSent=body;setSync("Scelte salvate: il calendario in abbonamento si aggiornerà da solo.");}
+                else if(r.status===501)setSync("Il calendario non può ricevere le modifiche: per applicarle iscriviti di nuovo.",true);
                 else throw new Error(r.status);})
-      .catch(()=>{setSt("err");setSync("Non riesco a inviare le modifiche (connessione assente?). Tocca «Non aggiornato» per riprovare.",true);});
+      .catch(()=>setSync("Non riesco a salvare le modifiche (connessione assente?). Riprovo alla prossima modifica.",true));
   }
-  window.__onSave=()=>{if(iscritto()&&statoJSON()!==lastSent)setSt("agg");clearTimeout(syncTimer);syncTimer=setTimeout(syncNow,800);};
+  window.__onSave=()=>{clearTimeout(syncTimer);syncTimer=setTimeout(syncNow,800);};
   if(WORKER&&iscritto()){setSync("Sei iscritto: ogni modifica fatta qui arriva da sola al tuo calendario.");syncNow();}
-  // L'indirizzo dell'abbonamento è SEMPRE lo stesso (solo il codice): se cambiasse, il telefono
-  // lo vedrebbe come un altro calendario e gli appuntamenti comparirebbero doppi.
-  // Le scelte viaggiano nell'indirizzo (?s=) solo se il Worker non ha l'archivio KV.
-  let senzaKV=false;
   function subLinks(){
-    let https=W0+"/c/"+token()+".ics";
-    if(senzaKV){
-      const bytes=new TextEncoder().encode(statoJSON());
-      let bin="";for(const b of bytes)bin+=String.fromCharCode(b);
-      https+="?s="+btoa(bin).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
-    }
+    const bytes=new TextEncoder().encode(statoJSON());
+    let bin="";for(const b of bytes)bin+=String.fromCharCode(b);
+    const https=W0+"/c/"+token()+".ics?s="+btoa(bin).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
     const webcal=https.replace(/^https:/,"webcal:");
     return {https,webcal,google:"https://calendar.google.com/calendar/r?cid="+encodeURIComponent(https)};
-  }
-  // Le scelte devono essere sul Worker PRIMA che il telefono chieda il calendario
-  function salvaOra(){
-    const body=statoJSON();
-    if(body===lastSent)return Promise.resolve(true);
-    return fetch(W0+"/stato/"+token(),{method:"PUT",body,headers:{"Content-Type":"application/json"}})
-      .then(r=>{if(r.ok){lastSent=body;return true;}if(r.status===501)senzaKV=true;return false;})
-      .catch(()=>false);
-  }
-  function dopoSalvataggio(fn){
-    if(statoJSON()===lastSent){fn();return;}
-    setSync("Salvo le tue scelte…");
-    salvaOra().then(ok=>{
-      if(ok||senzaKV){setSync("Sei iscritto: ogni modifica fatta qui arriva da sola al tuo calendario.");fn();}
-      else setSync("Non riesco a salvare le scelte (connessione assente?). Riprova tra poco.",true);
-    });
   }
   function add(ev){
     if(!current.length){ev.preventDefault();return;}
     if(WORKER){
       // Abbonamento: il calendario si aggiorna da solo quando cambia il piano
-      ev.preventDefault();
-      if(iscritto()&&ev.currentTarget.id==="dl"){
-        // Già iscritto: il pulsante in basso è solo l'indicatore dello stato
-        if(syncSt==="err"){lastSent=null;syncNow();}
-        else $("collega").scrollIntoView({behavior:"smooth",block:"start"});
+      try{localStorage.setItem(SKEY,"1");}catch(_){}
+      try{syncNow();}catch(_){}
+      const u=subLinks(),a=ev.currentTarget;
+      if(android){
+        // Android: l'app Google Calendar non aggiunge calendari esterni.
+        // Copio l'indirizzo e apro in Chrome (non nell'app) la pagina «Da URL» di Google Calendar.
+        ev.preventDefault();
+        const page="calendar.google.com/calendar/u/0/r/settings/addbyurl";
+        const go=()=>{location.href="intent://"+page+"#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url="+encodeURIComponent("https://"+page)+";end";};
+        let done=false;const once=()=>{if(!done){done=true;go();}};
+        if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(u.https).then(once,()=>{prompt("Copia questo indirizzo, poi tocca OK:",u.https);once();});
+        else{prompt("Copia questo indirizzo, poi tocca OK:",u.https);once();}
+        setTimeout(once,1500);
         return;
       }
-      if(iscritto()&&!confirm("Non serve iscriversi di nuovo per cambiare le spunte, gli appuntamenti o le classi: le modifiche sono già state inviate e il tuo calendario le riceve da solo (il telefono può metterci da qualche minuto a qualche ora).\n\nTocca OK solo se nel Calendario NON hai «Impegni scuola 2026/27», per esempio perché l'iscrizione non era andata a buon fine: altrimenti crei un calendario doppio."))return;
-      try{localStorage.setItem(SKEY,"1");}catch(_){}
-      dopoSalvataggio(()=>{ui();iscrivi();});
+      a.href=u.webcal;a.removeAttribute("target");
       return;
     }
     if(iOS&&standalone){ev.preventDefault();apriInSafari();return;}
@@ -709,24 +681,9 @@ function init(){
       }
     }else{ev.preventDefault();download();}
   }
-  function iscrivi(){
-    const u=subLinks();
-    if(android){
-      // Android: l'app Google Calendar non aggiunge calendari esterni.
-      // Copio l'indirizzo e apro in Chrome (non nell'app) la pagina «Da URL» di Google Calendar.
-      const page="calendar.google.com/calendar/u/0/r/settings/addbyurl";
-      const go=()=>{location.href="intent://"+page+"#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url="+encodeURIComponent("https://"+page)+";end";};
-      let done=false;const once=()=>{if(!done){done=true;go();}};
-      if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(u.https).then(once,()=>{prompt("Copia questo indirizzo, poi tocca OK:",u.https);once();});
-      else{prompt("Copia questo indirizzo, poi tocca OK:",u.https);once();}
-      setTimeout(once,1500);
-      return;
-    }
-    location.href=u.webcal;
-  }
   let steps,alt;
   if(WORKER){
-    ui();
+    for(const id of ["add","dl"])$(id).textContent="Iscriviti al calendario";
     if(android){
       steps=["Tocca «Iscriviti al calendario»: l'indirizzo del calendario viene copiato e si apre Google Calendar in Chrome, alla pagina «Aggiungi da URL».",
              "Tieni premuto nel campo «URL del calendario», scegli «Incolla» e tocca «Aggiungi calendario».",

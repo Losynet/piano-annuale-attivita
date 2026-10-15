@@ -54,6 +54,7 @@ function compute(st,today){
   for(const ev of CLASS_EV) if(has(ev.ist[0])&&sel[ev.ist[0]].includes(ev.cls)) res.push({...ev});
   for(const g of GEN){
     if(!g.ist.some(has)) continue;
+    if(g.cls&&!(has(g.ist[0])&&sel[g.ist[0]].includes(g.cls))) continue; // impegno di una sola classe
     if((g.cat==="coll"&&!o.coll)||(g.cat==="fam"&&!o.fam)||(g.cat==="glo"&&!o.glo)||(g.cat==="cal"&&!o.cal)) continue;
     if(g.tri&&!tri) continue;
     const ev={...g};ev.fin=!!g.e;
@@ -100,7 +101,7 @@ function buildICS(list,alarm){
     "END:VTIMEZONE"];
   const alarmBlock=trig=>["BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:Promemoria","TRIGGER:"+trig,"END:VALARM"];
   for(const e of list){
-    const summary=e.cat==="classe"?e.t+", "+e.place:e.t;
+    const summary=(e.cat==="classe"||e.cls)?e.t+", "+e.place:e.t;
     const desc=[e.note,e.clash?"Attenzione: si sovrappone a "+e.clash.join("; "):"","Fonte: Piano annuale delle attività 2026/27, I.I.S. Pisticci-Montalbano"].filter(Boolean).join("\n");
     L.push("BEGIN:VEVENT","UID:"+hash(e.d+(e.s||"")+summary)+"-"+e.d.replace(/-/g,"")+"@impegni-2026-27","DTSTAMP:"+st,
       "SUMMARY:"+esc(summary),"DESCRIPTION:"+esc(desc));
@@ -120,7 +121,7 @@ function buildICS(list,alarm){
   return L.map(fold).join("\r\n")+"\r\n";
 }
 function gcal(e){
-  const p=new URLSearchParams({action:"TEMPLATE",text:e.cat==="classe"?e.t+", "+e.place:e.t,
+  const p=new URLSearchParams({action:"TEMPLATE",text:(e.cat==="classe"||e.cls)?e.t+", "+e.place:e.t,
     details:(e.note?e.note+"\n":"")+"Piano annuale delle attività 2026/27",location:e.loc||"",ctz:"Europe/Rome"});
   const d0=e.d.replace(/-/g,"");
   p.set("dates",e.all?d0+"/"+addDays(e.to||e.d,1).replace(/-/g,""):d0+"T"+e.s.replace(":","")+"00/"+d0+"T"+(e.fin?e.e:e.s).replace(":","")+"00");
@@ -134,7 +135,6 @@ function selOf(ind,cls){
     for(const c of I.classi)if(cls.includes(I.sede+"|"+c)&&!sel[I.sede].includes(c))sel[I.sede].push(c);}
   return sel;
 }
-
   return {compute, buildICS, selOf};
 }
 
